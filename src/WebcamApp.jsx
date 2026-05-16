@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, Battery, Mic, MicOff, Settings, Sun, LogOut, SunMoon, RotateCw } from 'lucide-react';
+import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, Battery, Mic, MicOff, Settings, Sun, LogOut, SunMoon, RotateCw, Info, X } from 'lucide-react';
 import Peer from 'peerjs';
 
 // --- HELPER COMPONENT: Video Player ---
@@ -56,8 +56,10 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection ---
+// --- SCREEN: Role Selection (Now with OBS Guide Modal) ---
 function RoleSelection({ setRole, setRoomId }) {
+  const [showGuide, setShowGuide] = useState(false);
+
   const handleSelectReceiver = () => {
     const code = Math.floor(10000 + Math.random() * 90000).toString();
     setRoomId(code);
@@ -67,7 +69,6 @@ function RoleSelection({ setRole, setRoomId }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto text-center relative">
       
-      {/* LOGO MOVED TO TOP LEFT WITH ROUNDED CORNERS */}
       <div className="absolute top-6 left-6 md:top-8 md:left-8">
         <img 
           src="./logo.jpg" 
@@ -83,7 +84,7 @@ function RoleSelection({ setRole, setRoomId }) {
         <p className="text-gray-400 text-lg md:text-xl font-medium">Select a device mode to begin</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl">
+      <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl mb-12">
         <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(255,59,59,0.2)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
           <div className="w-20 h-20 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]"><Monitor className="w-10 h-10" /></div>
           <h2 className="text-2xl font-bold mb-2 text-white">I am the PC</h2>
@@ -96,6 +97,66 @@ function RoleSelection({ setRole, setRoomId }) {
           <p className="text-gray-400 text-center">Broadcast video. You'll need a code from the PC.</p>
         </button>
       </div>
+
+      <button 
+        onClick={() => setShowGuide(true)} 
+        className="flex items-center gap-2 px-6 py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-lg"
+      >
+        <Info className="w-5 h-5" /> How to connect to OBS Studio
+      </button>
+
+      {/* OBS GUIDE MODAL */}
+      {showGuide && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#111] border border-[#333] rounded-3xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-[0_0_50px_rgba(255,20,147,0.2)] text-left relative animate-in fade-in zoom-in-95">
+            
+            <button 
+              onClick={() => setShowGuide(false)} 
+              className="absolute top-6 right-6 p-2 bg-[#222] hover:bg-[#ff3b3b] text-gray-400 hover:text-white rounded-full transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <h2 className="text-3xl font-extrabold text-white mb-2">OBS Studio Setup Guide</h2>
+            <p className="text-[#ff1493] font-medium mb-8">Stream directly to your software without opening a browser window.</p>
+
+            <div className="space-y-6 text-gray-300">
+              <section>
+                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 1: Pick your Code</h3>
+                <p>Decide on a permanent 5-digit number you will always use for OBS (e.g., <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b]">77777</code>).</p>
+              </section>
+
+              <section>
+                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 2: Add Browser Source</h3>
+                <p>Open OBS and select your streaming scene (like your BGMI gameplay overlay). Go to the <strong>Sources</strong> dock, click the <strong>+</strong> button, and select <strong>Browser</strong>. Name it "Zetcam".</p>
+              </section>
+
+              <section>
+                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 3: Configure the Link</h3>
+                <p className="mb-2">In the properties window, set the following:</p>
+                <ul className="list-disc pl-5 space-y-2 text-sm">
+                  <li><strong>URL:</strong> Paste your website link and add your code to the end: <br/> <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b] break-all block mt-1">https://your-github-username.github.io/Zetcam/?room=77777</code></li>
+                  <li><strong>Width:</strong> <code className="text-white">1920</code> | <strong>Height:</strong> <code className="text-white">1080</code></li>
+                  <li><strong>Custom CSS:</strong> Delete all text in this box.</li>
+                  <li>Check the box for <strong>Control audio via OBS</strong> to route your phone microphone directly into your audio mixer.</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 4: Go Live</h3>
+                <p>Open this app on your phone, tap <strong>I am the Camera</strong>, type in your code, and hit <strong>Go Live</strong>. Your video will instantly appear in OBS!</p>
+              </section>
+            </div>
+            
+            <button 
+              onClick={() => setShowGuide(false)} 
+              className="mt-8 w-full py-4 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold text-white transition-all uppercase tracking-widest text-sm"
+            >
+              Got it, let's stream!
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
