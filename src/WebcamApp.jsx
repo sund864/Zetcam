@@ -56,7 +56,7 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection (With Updated Sizing and Pinkish-White Glow) ---
+// --- SCREEN: Role Selection (With Permanent Bright Glow) ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -69,15 +69,14 @@ function RoleSelection({ setRole, setRoomId }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] p-4 md:p-6 max-w-5xl mx-auto text-center relative">
       
-      {/* HEADER: Logo with new pinkish-white shadow */}
+      {/* HEADER: Logo with permanent, bright pinkish-white shadow */}
       <div className="flex flex-col items-center mb-8 md:mb-12 space-y-4 md:space-y-6">
         <img 
           src="./logo.jpg" 
           alt="Zetcam" 
-          className="w-48 md:w-64 rounded-3xl shadow-[0_0_25px_rgba(255,220,235,0.4)] transition-all" 
+          className="w-48 md:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all" 
         />
         <div className="space-y-2 md:space-y-3">
-          {/* Welcome text size updated to match "I am the PC" */}
           <h1 className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">
             Welcome to Zetcam
           </h1>
@@ -86,15 +85,15 @@ function RoleSelection({ setRole, setRoomId }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mb-10">
-        {/* PC Card with matching pinkish-white shadow */}
-        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-6 md:p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_25px_rgba(255,220,235,0.4)] hover:shadow-[0_0_35px_rgba(255,220,235,0.6)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
+        {/* PC Card with permanent bright glow */}
+        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-6 md:p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
           <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]"><Monitor className="w-8 h-8 md:w-10 md:h-10" /></div>
           <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">I am the PC</h2>
           <p className="text-gray-400 text-sm md:text-base text-center">Receive video and control the camera remotely.</p>
         </button>
 
-        {/* Camera Card with matching pinkish-white shadow */}
-        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-6 md:p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_25px_rgba(255,220,235,0.4)] hover:shadow-[0_0_35px_rgba(255,220,235,0.6)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
+        {/* Camera Card with permanent bright glow */}
+        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-6 md:p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
           <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]"><Smartphone className="w-8 h-8 md:w-10 md:h-10" /></div>
           <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">I am the Camera</h2>
           <p className="text-gray-400 text-sm md:text-base text-center">Broadcast video. You'll need a code from the PC.</p>
@@ -103,7 +102,7 @@ function RoleSelection({ setRole, setRoomId }) {
 
       <button 
         onClick={() => setShowGuide(true)} 
-        className="flex items-center gap-2 px-6 py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.1)] text-sm md:text-base"
+        className="flex items-center gap-2 px-6 py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-sm md:text-base"
       >
         <Info className="w-4 h-4 md:w-5 md:h-5" /> How to connect to OBS Studio
       </button>
