@@ -65,10 +65,22 @@ function RoleSelection({ setRole, setRoomId }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-4xl mx-auto text-center">
-      <div className="mb-12 space-y-4">
-        {/* NEW LOGO INSERTED HERE */}
-        <img src="./logo.jpg" alt="Zetcam" className="w-80 md:w-[28rem] mx-auto drop-shadow-[0_0_25px_rgba(255,20,147,0.4)] mb-4" />
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto text-center relative">
+      
+      {/* LOGO MOVED TO TOP LEFT WITH ROUNDED CORNERS */}
+      <div className="absolute top-6 left-6 md:top-8 md:left-8">
+        <img 
+          src="./logo.jpg" 
+          alt="Zetcam" 
+          className="w-32 md:w-48 rounded-2xl md:rounded-3xl shadow-[0_0_20px_rgba(255,20,147,0.3)] transition-all" 
+        />
+      </div>
+
+      <div className="mb-12 space-y-4 mt-24 md:mt-0">
+        <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)]">
+          Welcome to Zetcam
+        </h1>
+        <p className="text-gray-400 text-lg md:text-xl font-medium">Select a device mode to begin</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl">
