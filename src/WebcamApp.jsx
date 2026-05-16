@@ -56,7 +56,7 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection (With Personalized OBS Guide) ---
+// --- SCREEN: Role Selection (Perfectly Centered Stack Layout) ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -67,74 +67,75 @@ function RoleSelection({ setRole, setRoomId }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-5xl mx-auto text-center relative">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] p-4 md:p-6 max-w-5xl mx-auto text-center relative">
       
-      <div className="absolute top-6 left-6 md:top-8 md:left-8">
+      {/* HEADER: Centered Logo and Text stack perfectly on PC & Mobile */}
+      <div className="flex flex-col items-center mb-8 md:mb-12 space-y-4 md:space-y-6">
         <img 
           src="./logo.jpg" 
           alt="Zetcam" 
           className="w-32 md:w-48 rounded-2xl md:rounded-3xl shadow-[0_0_20px_rgba(255,20,147,0.3)] transition-all" 
         />
+        <div className="space-y-2 md:space-y-3">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">
+            Welcome to Zetcam
+          </h1>
+          <p className="text-gray-400 text-base md:text-lg lg:text-xl font-medium">Select a device mode to begin</p>
+        </div>
       </div>
 
-      <div className="mb-12 space-y-4 mt-24 md:mt-0">
-        <h1 className="text-4xl md:text-6xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)]">
-          Welcome to Zetcam
-        </h1>
-        <p className="text-gray-400 text-lg md:text-xl font-medium">Select a device mode to begin</p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl mb-12">
-        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(255,59,59,0.2)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]"><Monitor className="w-10 h-10" /></div>
-          <h2 className="text-2xl font-bold mb-2 text-white">I am the PC</h2>
-          <p className="text-gray-400 text-center">Receive video and control the camera remotely.</p>
+      {/* CARDS: Grid stacks vertically on mobile, side-by-side on PC */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mb-10">
+        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-6 md:p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(255,59,59,0.2)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]"><Monitor className="w-8 h-8 md:w-10 md:h-10" /></div>
+          <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">I am the PC</h2>
+          <p className="text-gray-400 text-sm md:text-base text-center">Receive video and control the camera remotely.</p>
         </button>
 
-        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(255,20,147,0.2)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
-          <div className="w-20 h-20 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]"><Smartphone className="w-10 h-10" /></div>
-          <h2 className="text-2xl font-bold mb-2 text-white">I am the Camera</h2>
-          <p className="text-gray-400 text-center">Broadcast video. You'll need a code from the PC.</p>
+        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-6 md:p-8 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(255,20,147,0.2)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
+          <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]"><Smartphone className="w-8 h-8 md:w-10 md:h-10" /></div>
+          <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">I am the Camera</h2>
+          <p className="text-gray-400 text-sm md:text-base text-center">Broadcast video. You'll need a code from the PC.</p>
         </button>
       </div>
 
       <button 
         onClick={() => setShowGuide(true)} 
-        className="flex items-center gap-2 px-6 py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-lg"
+        className="flex items-center gap-2 px-6 py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-lg text-sm md:text-base"
       >
-        <Info className="w-5 h-5" /> How to connect to OBS Studio
+        <Info className="w-4 h-4 md:w-5 md:h-5" /> How to connect to OBS Studio
       </button>
 
       {/* OBS GUIDE MODAL */}
       {showGuide && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#111] border border-[#333] rounded-3xl p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-[0_0_50px_rgba(255,20,147,0.2)] text-left relative animate-in fade-in zoom-in-95">
+          <div className="bg-[#111] border border-[#333] rounded-3xl p-6 md:p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-[0_0_50px_rgba(255,20,147,0.2)] text-left relative animate-in fade-in zoom-in-95">
             
             <button 
               onClick={() => setShowGuide(false)} 
-              className="absolute top-6 right-6 p-2 bg-[#222] hover:bg-[#ff3b3b] text-gray-400 hover:text-white rounded-full transition-colors"
+              className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-[#222] hover:bg-[#ff3b3b] text-gray-400 hover:text-white rounded-full transition-colors"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 md:w-6 md:h-6" />
             </button>
 
-            <h2 className="text-3xl font-extrabold text-white mb-2">OBS Studio Setup Guide</h2>
-            <p className="text-[#ff1493] font-medium mb-8">Stream directly to your software without opening a browser window.</p>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">OBS Studio Setup Guide</h2>
+            <p className="text-[#ff1493] font-medium mb-6 md:mb-8 text-sm md:text-base">Stream directly to your software without opening a browser window.</p>
 
-            <div className="space-y-6 text-gray-300">
+            <div className="space-y-4 md:space-y-6 text-gray-300 text-sm md:text-base">
               <section>
-                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 1: Pick your Code</h3>
+                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 1: Pick your Code</h3>
                 <p>Decide on a permanent 5-digit number you will always use for OBS (e.g., <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b]">77777</code>).</p>
               </section>
 
               <section>
-                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 2: Add Browser Source</h3>
-                <p>Open OBS and select your streaming scene (like your BGMI gameplay overlay). Go to the <strong>Sources</strong> dock, click the <strong>+</strong> button, and select <strong>Browser</strong>. Name it "Zetcam".</p>
+                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 2: Add Browser Source</h3>
+                <p>Open OBS and select your streaming scene. Go to the <strong>Sources</strong> dock, click the <strong>+</strong> button, and select <strong>Browser</strong>. Name it "Zetcam".</p>
               </section>
 
               <section>
-                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 3: Configure the Link</h3>
+                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 3: Configure the Link</h3>
                 <p className="mb-2">In the properties window, set the following:</p>
-                <ul className="list-disc pl-5 space-y-2 text-sm">
+                <ul className="list-disc pl-5 space-y-2">
                   <li><strong>URL:</strong> Copy your personalized link and paste it into OBS: <br/> <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b] break-all block mt-1 select-all">https://sund864.github.io/Zetcam/?room=77777</code></li>
                   <li><strong>Width:</strong> <code className="text-white">1920</code> | <strong>Height:</strong> <code className="text-white">1080</code></li>
                   <li><strong>Custom CSS:</strong> Delete all text in this box.</li>
@@ -143,14 +144,14 @@ function RoleSelection({ setRole, setRoomId }) {
               </section>
 
               <section>
-                <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 4: Go Live</h3>
+                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 4: Go Live</h3>
                 <p>Open this app on your phone, tap <strong>I am the Camera</strong>, type in your code (e.g., 77777), and hit <strong>Go Live</strong>. Your video will instantly appear in OBS!</p>
               </section>
             </div>
             
             <button 
               onClick={() => setShowGuide(false)} 
-              className="mt-8 w-full py-4 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold text-white transition-all uppercase tracking-widest text-sm"
+              className="mt-6 md:mt-8 w-full py-3 md:py-4 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold text-white transition-all uppercase tracking-widest text-xs md:text-sm"
             >
               Got it, let's stream!
             </button>
@@ -247,7 +248,6 @@ function Receiver({ roomId, goBack }) {
                 </p>
               </>
             ) : (
-              // BIG CENTERED PAIRING CODE BOX
               <div className="bg-[#111]/90 backdrop-blur-xl p-10 md:p-16 rounded-[3rem] border border-[#333] shadow-[0_0_50px_rgba(255,20,147,0.15)] text-center animate-in zoom-in-95 duration-500">
                 <div className="flex justify-center mb-6">
                   <Monitor className="w-12 h-12 text-[#ff3b3b] opacity-80 animate-pulse" />
@@ -263,13 +263,12 @@ function Receiver({ roomId, goBack }) {
         )}
       </div>
 
-      {/* TOP BAR (Now only contains the back button) */}
       <div className={`absolute inset-x-0 top-0 p-6 flex justify-between items-start bg-gradient-to-b from-black/90 to-transparent transition-opacity duration-300 ${remoteStream && !isPhoneSwitching ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'} pointer-events-none`}>
         <button onClick={goBack} className="pointer-events-auto text-sm bg-white/10 hover:bg-[#ff3b3b] hover:text-white px-5 py-2.5 rounded-full backdrop-blur-md font-bold transition-all uppercase tracking-wider shadow-xl">← Leave Room</button>
       </div>
 
       {remoteStream && !isPhoneSwitching && (
-        <div className="absolute top-6 right-6 flex flex-col items-end gap-3 z-50">
+        <div className="absolute top-6 right-6 flex flex-col items-end gap-3 z-50 pointer-events-auto">
           <button onClick={() => setShowSettings(!showSettings)} className="p-4 bg-[#111]/90 hover:bg-[#ff1493] hover:text-white backdrop-blur-xl rounded-full text-white border border-[#333] transition-all shadow-[0_0_20px_rgba(255,20,147,0.2)]">
             <Settings className="w-7 h-7" />
           </button>
@@ -311,7 +310,7 @@ function Receiver({ roomId, goBack }) {
       )}
 
       {remoteStream && (
-        <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-40">
+        <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-40 pointer-events-auto">
           <button onClick={toggleFullScreen} className="bg-black/60 hover:bg-[#ff1493] hover:text-white backdrop-blur-md p-4 rounded-full text-white transition-all shadow-[0_0_15px_rgba(255,20,147,0.3)] border border-white/10" title="Toggle Fullscreen">
             <Maximize2 className="w-8 h-8" />
           </button>
