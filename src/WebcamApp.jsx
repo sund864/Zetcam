@@ -238,24 +238,34 @@ function Receiver({ roomId, goBack }) {
         {remoteStream && !isPhoneSwitching ? (
           <VideoPlayer stream={remoteStream} isLocal={false} lowLight={lowLightMode} rotation={rotation} />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500">
-            <RefreshCw className={`w-16 h-16 mb-6 opacity-40 ${isPhoneSwitching ? 'animate-spin text-[#ff1493]' : ''}`} />
-            <p className="text-2xl font-medium tracking-wide">
-              {isPhoneSwitching ? 'Cycling Phone Hardware...' : status}
-            </p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            {isPhoneSwitching ? (
+              <>
+                <RefreshCw className="w-16 h-16 mb-6 opacity-80 animate-spin text-[#ff1493]" />
+                <p className="text-2xl font-medium tracking-wide text-gray-400">
+                  Cycling Phone Hardware...
+                </p>
+              </>
+            ) : (
+              // BIG CENTERED PAIRING CODE BOX
+              <div className="bg-[#111]/90 backdrop-blur-xl p-10 md:p-16 rounded-[3rem] border border-[#333] shadow-[0_0_50px_rgba(255,20,147,0.15)] text-center animate-in zoom-in-95 duration-500">
+                <div className="flex justify-center mb-6">
+                  <Monitor className="w-12 h-12 text-[#ff3b3b] opacity-80 animate-pulse" />
+                </div>
+                <p className="text-[#ff1493] font-bold mb-3 text-sm uppercase tracking-[0.3em]">Waiting for Camera</p>
+                <div className="text-7xl md:text-9xl font-mono font-black tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                  {roomId}
+                </div>
+                <p className="text-gray-400 mt-6 max-w-sm mx-auto text-base font-medium">Enter this code on your phone to connect.</p>
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      <div className={`absolute inset-x-0 top-0 p-6 flex justify-between items-start bg-gradient-to-b from-black/90 to-transparent transition-opacity duration-300 ${remoteStream && !isPhoneSwitching ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-        <button onClick={goBack} className="text-sm bg-white/10 hover:bg-[#ff3b3b] hover:text-white px-5 py-2.5 rounded-full backdrop-blur-md font-bold transition-all uppercase tracking-wider shadow-xl">← Leave Room</button>
-        {!remoteStream && (
-          <div className="bg-[#111]/90 backdrop-blur-xl p-8 rounded-3xl border border-[#333] shadow-[0_0_40px_rgba(255,20,147,0.15)] text-center">
-            <p className="text-[#ff1493] font-bold mb-2 text-sm uppercase tracking-widest">Pairing Code</p>
-            <div className="text-7xl font-mono font-extrabold tracking-widest text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">{roomId}</div>
-            <p className="text-gray-400 mt-4 max-w-xs text-sm">Enter this code on your phone.</p>
-          </div>
-        )}
+      {/* TOP BAR (Now only contains the back button) */}
+      <div className={`absolute inset-x-0 top-0 p-6 flex justify-between items-start bg-gradient-to-b from-black/90 to-transparent transition-opacity duration-300 ${remoteStream && !isPhoneSwitching ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'} pointer-events-none`}>
+        <button onClick={goBack} className="pointer-events-auto text-sm bg-white/10 hover:bg-[#ff3b3b] hover:text-white px-5 py-2.5 rounded-full backdrop-blur-md font-bold transition-all uppercase tracking-wider shadow-xl">← Leave Room</button>
       </div>
 
       {remoteStream && !isPhoneSwitching && (
