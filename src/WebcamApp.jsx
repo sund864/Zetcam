@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, AlertCircle, Link } from 'lucide-react';
+import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, Zap, Battery, Mic, MicOff, Settings, Sun } from 'lucide-react';
 import Peer from 'peerjs';
 
+// --- HELPER COMPONENT: Video Player ---
 const VideoPlayer = ({ stream, isLocal = false }) => {
   const videoRef = useRef(null);
 
@@ -17,17 +18,18 @@ const VideoPlayer = ({ stream, isLocal = false }) => {
       autoPlay
       playsInline
       muted={isLocal}
-      className="w-full h-full object-contain bg-black rounded-lg shadow-xl"
+      className="w-full h-full object-contain bg-black rounded-lg shadow-2xl"
     />
   );
 };
 
+// --- MAIN COMPONENT ---
 export default function WebcamApp() {
   const [role, setRole] = useState('select'); 
   const [roomId, setRoomId] = useState('');
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen bg-stone-900 text-stone-100 font-sans selection:bg-amber-500/30">
       {role === 'select' && <RoleSelection setRole={setRole} setRoomId={setRoomId} />}
       {role === 'receiver' && <Receiver roomId={roomId} goBack={() => setRole('select')} />}
       {role === 'sender' && <Sender roomId={roomId} goBack={() => setRole('select')} />}
@@ -35,6 +37,7 @@ export default function WebcamApp() {
   );
 }
 
+// --- SCREEN: Role Selection ---
 function RoleSelection({ setRole, setRoomId }) {
   const handleSelectReceiver = () => {
     const code = Math.floor(10000 + Math.random() * 90000).toString();
@@ -45,27 +48,32 @@ function RoleSelection({ setRole, setRoomId }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-4xl mx-auto text-center">
       <div className="mb-12 space-y-4">
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">Wireless Webcam</h1>
-        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">Turn your phone into a high-quality webcam for your PC instantly.</p>
+        <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 bg-clip-text text-transparent drop-shadow-sm">
+          Zetcam Pro
+        </h1>
+        <p className="text-stone-400 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+          Wireless high-fidelity streaming. Turn your phone into a premium webcam.
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8 w-full max-w-3xl">
-        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-8 bg-slate-800 border border-slate-700 rounded-2xl hover:bg-slate-750 hover:border-blue-500 transition-all shadow-lg text-left w-full focus:ring-4 focus:ring-blue-500/50">
-          <div className="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Monitor className="w-8 h-8" /></div>
-          <h2 className="text-2xl font-semibold mb-2">I am the PC</h2>
-          <p className="text-slate-400 text-center">Receive the video stream on this device. Start here to get your code.</p>
+        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-8 bg-stone-800 border border-stone-700 rounded-3xl hover:bg-stone-800 hover:border-amber-500 transition-all shadow-xl hover:shadow-amber-500/20 text-left w-full focus:ring-4 focus:ring-amber-500/50">
+          <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 text-stone-900 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg"><Monitor className="w-10 h-10" /></div>
+          <h2 className="text-2xl font-bold mb-2">I am the PC</h2>
+          <p className="text-stone-400 text-center">Receive the video stream on this device. Start here to get your code.</p>
         </button>
 
-        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-8 bg-slate-800 border border-slate-700 rounded-2xl hover:bg-slate-750 hover:border-emerald-500 transition-all shadow-lg text-left w-full focus:ring-4 focus:ring-emerald-500/50">
-          <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Smartphone className="w-8 h-8" /></div>
-          <h2 className="text-2xl font-semibold mb-2">I am the Camera</h2>
-          <p className="text-slate-400 text-center">Use this device's camera to broadcast. You'll need a code from the PC.</p>
+        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-8 bg-stone-800 border border-stone-700 rounded-3xl hover:bg-stone-800 hover:border-rose-500 transition-all shadow-xl hover:shadow-rose-500/20 text-left w-full focus:ring-4 focus:ring-rose-500/50">
+          <div className="w-20 h-20 bg-gradient-to-br from-rose-400 to-red-500 text-stone-900 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg"><Smartphone className="w-10 h-10" /></div>
+          <h2 className="text-2xl font-bold mb-2">I am the Camera</h2>
+          <p className="text-stone-400 text-center">Use this device's camera to broadcast. You'll need a code from the PC.</p>
         </button>
       </div>
     </div>
   );
 }
 
+// --- SCREEN: Receiver (PC) ---
 function Receiver({ roomId, goBack }) {
   const [remoteStream, setRemoteStream] = useState(null);
   const [status, setStatus] = useState('Waiting for camera...');
@@ -76,49 +84,30 @@ function Receiver({ roomId, goBack }) {
     const peer = new Peer(`webcam-app-${roomId}`);
     peerRef.current = peer;
 
-    peer.on('open', () => {
-      setStatus('Waiting for camera to connect...');
-    });
+    peer.on('open', () => setStatus('Waiting for camera to connect...'));
 
     peer.on('call', (call) => {
       setStatus('Connecting to camera...');
       call.answer(); 
-      
       call.on('stream', (stream) => {
         setRemoteStream(stream);
         setStatus('Connected');
       });
-
       call.on('close', () => {
         setStatus('Camera disconnected. Waiting...');
         setRemoteStream(null);
       });
     });
 
-    peer.on('connection', (conn) => {
-      conn.on('open', () => {
-        console.log("Data connection established");
-      });
-    });
-
-    peer.on('error', (err) => {
-      console.error(err);
-      setStatus(`Network Error: ${err.type}`);
-    });
-
-    return () => {
-      if (peerRef.current) peerRef.current.destroy();
-    };
+    return () => { if (peerRef.current) peerRef.current.destroy(); };
   }, [roomId]);
 
   const toggleFullScreen = () => {
     const el = containerRef.current;
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (!document.fullscreenElement) {
       if (el.requestFullscreen) el.requestFullscreen().catch(e => console.error(e));
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
     } else {
       if (document.exitFullscreen) document.exitFullscreen();
-      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
     }
   };
 
@@ -128,41 +117,50 @@ function Receiver({ roomId, goBack }) {
         {remoteStream ? (
           <VideoPlayer stream={remoteStream} isLocal={false} />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
-            <Monitor className="w-16 h-16 mb-4 opacity-50 animate-pulse" />
-            <p className="text-xl font-medium">{status}</p>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-stone-500">
+            <Monitor className="w-20 h-20 mb-6 opacity-40 animate-pulse text-amber-500" />
+            <p className="text-2xl font-medium tracking-wide">{status}</p>
           </div>
         )}
       </div>
 
       <div className={`absolute inset-x-0 top-0 p-6 flex justify-between items-start bg-gradient-to-b from-black/80 to-transparent transition-opacity duration-300 ${remoteStream ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
-        <button onClick={goBack} className="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg backdrop-blur font-medium transition-colors">← Back</button>
+        <button onClick={goBack} className="text-sm bg-white/10 hover:bg-amber-500 hover:text-stone-900 px-5 py-2.5 rounded-full backdrop-blur-md font-bold transition-all uppercase tracking-wider">← Back</button>
         {!remoteStream && (
-          <div className="bg-slate-800/90 backdrop-blur-md p-6 rounded-2xl border border-slate-700 shadow-2xl text-center">
-            <p className="text-slate-400 font-medium mb-2 text-sm uppercase tracking-wider">Pairing Code</p>
-            <div className="text-6xl font-mono font-bold tracking-widest text-blue-400 drop-shadow-sm">{roomId}</div>
-            <p className="text-slate-400 mt-4 max-w-xs text-sm">Enter this code on your phone.</p>
+          <div className="bg-stone-900/80 backdrop-blur-xl p-8 rounded-3xl border border-stone-700 shadow-2xl text-center">
+            <p className="text-amber-500 font-bold mb-2 text-sm uppercase tracking-widest">Pairing Code</p>
+            <div className="text-7xl font-mono font-extrabold tracking-widest text-stone-100 drop-shadow-lg">{roomId}</div>
+            <p className="text-stone-400 mt-4 max-w-xs text-sm">Enter this code on your phone.</p>
           </div>
         )}
       </div>
 
       {remoteStream && (
-        <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <button onClick={toggleFullScreen} className="bg-black/50 hover:bg-black/80 backdrop-blur p-3 rounded-full text-white transition-colors border border-white/10"><Maximize2 className="w-6 h-6" /></button>
+        <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button onClick={toggleFullScreen} className="bg-black/60 hover:bg-amber-500 hover:text-black backdrop-blur-md p-4 rounded-full text-white transition-all shadow-lg"><Maximize2 className="w-8 h-8" /></button>
         </div>
       )}
     </div>
   );
 }
 
+// --- SCREEN: Sender (Phone) ---
 function Sender({ goBack }) {
   const [inputCode, setInputCode] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  
   const [localStream, setLocalStream] = useState(null);
-  const [isFrontCamera, setIsFrontCamera] = useState(false);
   const [connected, setConnected] = useState(false);
   
+  // Advanced Features State
+  const [isFrontCamera, setIsFrontCamera] = useState(false);
+  const [micEnabled, setMicEnabled] = useState(false);
+  const [torchEnabled, setTorchEnabled] = useState(false);
+  const [batterySaver, setBatterySaver] = useState(false);
+  const [qualityMode, setQualityMode] = useState('high'); // 'high' | 'performance'
+  const [showSettings, setShowSettings] = useState(false);
+
   const peerRef = useRef(null);
   const callRef = useRef(null);
 
@@ -177,20 +175,22 @@ function Sender({ goBack }) {
     }
   };
 
-  useEffect(() => {
-    return () => stopStream();
-  }, []);
+  useEffect(() => { return () => stopStream(); }, []);
 
-  const requestOptimizedStream = async (frontFacing) => {
+  const requestOptimizedStream = async (frontFacing, mode) => {
     const facingMode = frontFacing ? 'user' : 'environment';
+    
+    // Always ask for audio, we will mute the track manually if user wants it muted
+    const baseConstraints = { audio: true }; 
+    
     try {
-      return await navigator.mediaDevices.getUserMedia({ video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false });
-    } catch (e1) {
-      try {
-        return await navigator.mediaDevices.getUserMedia({ video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
-      } catch (e2) {
-        return await navigator.mediaDevices.getUserMedia({ video: { facingMode }, audio: false });
+      if (mode === 'high') {
+        return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+      } else {
+        return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 60 } } });
       }
+    } catch (e1) {
+      return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode } });
     }
   };
 
@@ -199,7 +199,10 @@ function Sender({ goBack }) {
     setIsConnecting(true);
 
     try {
-      const stream = await requestOptimizedStream(isFrontCamera);
+      const stream = await requestOptimizedStream(isFrontCamera, qualityMode);
+      
+      // Mute audio track immediately based on state
+      stream.getAudioTracks().forEach(track => track.enabled = micEnabled);
       setLocalStream(stream);
 
       const peer = new Peer();
@@ -207,12 +210,13 @@ function Sender({ goBack }) {
 
       peer.on('open', () => {
         const targetId = `webcam-app-${roomIdToConnect}`;
-        
         const conn = peer.connect(targetId);
+        
         conn.on('open', () => {
           setConnected(true);
           setIsConnecting(false);
         });
+        
         conn.on('close', () => {
           setConnected(false);
           setErrorMsg("Disconnected from PC.");
@@ -225,15 +229,10 @@ function Sender({ goBack }) {
       peer.on('error', (err) => {
         setIsConnecting(false);
         stopStream();
-        if (err.type === 'peer-unavailable') {
-          setErrorMsg("PC not found. Check the pairing code.");
-        } else {
-          setErrorMsg(err.message);
-        }
+        setErrorMsg(err.type === 'peer-unavailable' ? "PC not found. Check the pairing code." : err.message);
       });
 
     } catch (err) {
-      console.error(err);
       setIsConnecting(false);
       stopStream();
       setErrorMsg(err.name === 'NotAllowedError' ? "Camera permission denied." : err.message);
@@ -248,66 +247,159 @@ function Sender({ goBack }) {
   const toggleCamera = async () => {
     const newMode = !isFrontCamera;
     setIsFrontCamera(newMode);
-    
+    setTorchEnabled(false); // Reset torch on switch
+    refreshStream(newMode, qualityMode);
+  };
+
+  const handleQualityChange = (mode) => {
+    setQualityMode(mode);
+    setTorchEnabled(false);
+    refreshStream(isFrontCamera, mode);
+    setShowSettings(false);
+  };
+
+  const refreshStream = async (facing, mode) => {
     if (localStream && callRef.current) {
       try {
-        const currentVideoTrack = localStream.getVideoTracks()[0];
-        const newStream = await requestOptimizedStream(newMode);
-        const newVideoTrack = newStream.getVideoTracks()[0];
+        const oldVideoTrack = localStream.getVideoTracks()[0];
+        const newStream = await requestOptimizedStream(facing, mode);
+        
+        // Match audio state
+        newStream.getAudioTracks().forEach(track => track.enabled = micEnabled);
         
         setLocalStream(newStream);
         
+        // Replace video track in active connection
         const sender = callRef.current.peerConnection.getSenders().find(s => s.track.kind === 'video');
-        if (sender) sender.replaceTrack(newVideoTrack);
+        if (sender) sender.replaceTrack(newStream.getVideoTracks()[0]);
         
-        currentVideoTrack.stop();
-      } catch (err) {
-        setIsFrontCamera(!newMode);
-      }
+        oldVideoTrack.stop();
+      } catch (err) { console.error("Failed to switch:", err); }
     }
   };
 
+  const toggleMic = () => {
+    const newMicState = !micEnabled;
+    setMicEnabled(newMicState);
+    if (localStream) {
+      localStream.getAudioTracks().forEach(track => track.enabled = newMicState);
+    }
+  };
+
+  const toggleTorch = async () => {
+    if (!localStream) return;
+    const track = localStream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities && track.getCapabilities();
+    
+    if (capabilities && capabilities.torch) {
+      try {
+        await track.applyConstraints({ advanced: [{ torch: !torchEnabled }] });
+        setTorchEnabled(!torchEnabled);
+      } catch (err) { console.error("Torch error:", err); }
+    } else {
+      alert("Flashlight is not supported on this camera lens.");
+    }
+  };
+
+  // --- RENDER LIVE CAMERA ---
   if (localStream) {
     return (
       <div className="flex flex-col h-[100dvh] w-full bg-black relative">
+        
+        {/* Battery Saver Overlay */}
+        {batterySaver && (
+          <div 
+            className="absolute inset-0 bg-black z-50 flex items-center justify-center cursor-pointer"
+            onClick={() => setBatterySaver(false)}
+          >
+            <p className="text-stone-700 text-xl font-bold animate-pulse">Tap anywhere to wake</p>
+          </div>
+        )}
+
         <div className="flex-1 w-full h-full relative">
           <VideoPlayer stream={localStream} isLocal={true} />
-          <div className="absolute top-4 right-4 flex items-center gap-2 bg-black/60 backdrop-blur px-3 py-1.5 rounded-full border border-white/10 text-sm font-medium">
-             <div className={`w-2.5 h-2.5 rounded-full ${connected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></div>
-             {connected ? 'LIVE' : 'Connecting...'}
+          
+          <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
+            {/* Status Indicator */}
+            <div className="flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-sm font-bold shadow-xl">
+               <div className={`w-3 h-3 rounded-full ${connected ? 'bg-rose-500 animate-pulse' : 'bg-amber-500'}`}></div>
+               <span className="tracking-wider uppercase">{connected ? 'LIVE' : 'Connecting'}</span>
+            </div>
+
+            {/* Quick Actions Top Right */}
+            <div className="flex flex-col gap-3">
+              <button onClick={() => setShowSettings(!showSettings)} className="p-3 bg-black/50 hover:bg-black/80 backdrop-blur rounded-full text-white border border-white/10 transition-all">
+                <Settings className="w-5 h-5" />
+              </button>
+              <button onClick={() => setBatterySaver(true)} className="p-3 bg-black/50 hover:bg-amber-500 hover:text-black backdrop-blur rounded-full text-white border border-white/10 transition-all">
+                <Battery className="w-5 h-5" />
+              </button>
+            </div>
           </div>
+
+          {/* Settings Menu Drawer */}
+          {showSettings && (
+            <div className="absolute top-20 right-6 bg-stone-900/95 backdrop-blur-xl border border-stone-700 p-4 rounded-3xl shadow-2xl w-64 z-40 animate-in fade-in slide-in-from-top-4">
+              <h3 className="text-stone-400 text-xs font-bold uppercase tracking-wider mb-3 px-2">Video Quality</h3>
+              <div className="flex flex-col gap-2 mb-4">
+                <button onClick={() => handleQualityChange('high')} className={`p-3 rounded-2xl text-sm font-bold text-left transition-all ${qualityMode === 'high' ? 'bg-amber-500 text-stone-900' : 'bg-stone-800 text-white hover:bg-stone-700'}`}>
+                  1080p High Quality
+                </button>
+                <button onClick={() => handleQualityChange('performance')} className={`p-3 rounded-2xl text-sm font-bold text-left transition-all ${qualityMode === 'performance' ? 'bg-amber-500 text-stone-900' : 'bg-stone-800 text-white hover:bg-stone-700'}`}>
+                  720p Performance (60fps)
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        <div className="absolute bottom-0 inset-x-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent flex justify-between items-center pb-safe">
-          <button onClick={() => { stopStream(); goBack(); }} className="p-4 bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white rounded-full transition-colors backdrop-blur border border-red-500/50"><VideoOff className="w-6 h-6" /></button>
-          <button onClick={toggleCamera} className="p-4 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors backdrop-blur border border-white/20"><SwitchCamera className="w-6 h-6" /></button>
+        {/* Bottom Control Bar */}
+        <div className="absolute bottom-0 inset-x-0 p-8 bg-gradient-to-t from-black via-black/90 to-transparent flex justify-center gap-6 items-center pb-safe">
+          
+          <button onClick={toggleMic} className={`p-5 rounded-full transition-all shadow-xl backdrop-blur-md ${micEnabled ? 'bg-white/20 text-white border-white/30' : 'bg-rose-500/20 text-rose-500 border-rose-500/30'} border focus:outline-none`}>
+            {micEnabled ? <Mic className="w-7 h-7" /> : <MicOff className="w-7 h-7" />}
+          </button>
+
+          <button onClick={() => { stopStream(); goBack(); }} className="p-6 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all shadow-rose-600/50 shadow-2xl border border-rose-500 focus:outline-none">
+            <VideoOff className="w-8 h-8" />
+          </button>
+
+          <button onClick={toggleCamera} className="p-5 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all shadow-xl backdrop-blur-md border border-white/20 focus:outline-none">
+            <SwitchCamera className="w-7 h-7" />
+          </button>
+
+          <button onClick={toggleTorch} className={`p-5 rounded-full transition-all shadow-xl backdrop-blur-md ${torchEnabled ? 'bg-amber-500 text-stone-900 border-amber-400' : 'bg-white/10 text-white border-white/20'} border focus:outline-none`}>
+            <Sun className="w-7 h-7" />
+          </button>
+
         </div>
       </div>
     );
   }
 
+  // --- RENDER CONNECTION FORM ---
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] p-6 max-w-md mx-auto relative">
-      <button onClick={goBack} className="absolute top-6 left-6 text-sm bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg font-medium transition-colors border border-slate-700">← Back</button>
+      <button onClick={goBack} className="absolute top-6 left-6 text-sm bg-stone-800 hover:bg-stone-700 px-5 py-2.5 rounded-full font-bold transition-all border border-stone-700 uppercase tracking-wider">← Back</button>
 
-      <div className="w-full bg-slate-800 p-8 rounded-3xl border border-slate-700 shadow-2xl">
-        <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 mx-auto"><Smartphone className="w-8 h-8" /></div>
-        <h2 className="text-2xl font-bold text-center mb-2">Connect Camera</h2>
-        <p className="text-slate-400 text-center mb-8 text-sm">Enter the 5-digit code shown on your PC.</p>
+      <div className="w-full bg-stone-800/80 backdrop-blur-xl p-10 rounded-[2.5rem] border border-stone-700 shadow-2xl">
+        <div className="w-20 h-20 bg-gradient-to-br from-rose-400 to-red-500 text-stone-900 rounded-full flex items-center justify-center mb-6 mx-auto shadow-lg"><Smartphone className="w-10 h-10" /></div>
+        <h2 className="text-3xl font-extrabold text-center mb-2">Link Camera</h2>
+        <p className="text-stone-400 text-center mb-10 text-sm font-medium">Enter the 5-digit code shown on your PC.</p>
 
         <form onSubmit={handleJoin} className="space-y-6">
           <input
             type="text" maxLength="5" placeholder="00000"
             value={inputCode} onChange={(e) => setInputCode(e.target.value.replace(/\D/g, ''))}
-            className="w-full bg-slate-900 border-2 border-slate-700 focus:border-emerald-500 rounded-xl px-6 py-4 text-center text-4xl font-mono font-bold tracking-[0.25em] text-white outline-none transition-colors"
+            className="w-full bg-stone-900 border-2 border-stone-700 focus:border-rose-500 rounded-2xl px-6 py-5 text-center text-5xl font-mono font-black tracking-[0.25em] text-white outline-none transition-all shadow-inner"
             required disabled={isConnecting}
           />
-          {errorMsg && <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-xl text-sm text-center">{errorMsg}</div>}
+          {errorMsg && <div className="bg-rose-500/10 border border-rose-500/50 text-rose-400 p-4 rounded-2xl text-sm font-bold text-center">{errorMsg}</div>}
           <button
             type="submit" disabled={inputCode.length !== 5 || isConnecting}
-            className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-700 disabled:text-slate-500 text-white font-bold py-4 rounded-xl transition-colors flex justify-center items-center gap-2 shadow-lg"
+            className="w-full bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 disabled:from-stone-700 disabled:to-stone-700 disabled:text-stone-500 text-white font-extrabold text-lg py-5 rounded-2xl transition-all flex justify-center items-center gap-3 shadow-xl hover:shadow-rose-500/30 uppercase tracking-widest"
           >
-            {isConnecting ? <><RefreshCw className="w-5 h-5 animate-spin" /> Connecting...</> : 'Start Camera'}
+            {isConnecting ? <><RefreshCw className="w-6 h-6 animate-spin" /> Linking...</> : 'Go Live'}
           </button>
         </form>
       </div>
