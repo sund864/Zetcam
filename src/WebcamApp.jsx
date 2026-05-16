@@ -30,15 +30,29 @@ const VideoPlayer = ({ stream, isLocal = false, lowLight = false, rotation = 0 }
   );
 };
 
-// --- MAIN COMPONENT ---
+// --- MAIN COMPONENT (Now with OBS Auto-Connect) ---
 export default function WebcamApp() {
   const [role, setRole] = useState('select'); 
   const [roomId, setRoomId] = useState('');
 
+  // Automatically check the URL for a room code when the app loads (For OBS!)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const roomParam = params.get('room');
+    if (roomParam) {
+      setRoomId(roomParam);
+      setRole('receiver');
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-stone-900 text-stone-100 font-sans selection:bg-amber-500/30 overflow-hidden">
       {role === 'select' && <RoleSelection setRole={setRole} setRoomId={setRoomId} />}
-      {role === 'receiver' && <Receiver roomId={roomId} goBack={() => setRole('select')} />}
+      {role === 'receiver' && <Receiver roomId={roomId} goBack={() => {
+        // Clear the URL if we go back, so we don't get stuck in OBS mode
+        window.history.replaceState({}, document.title, window.location.pathname);
+        setRole('select');
+      }} />}
       {role === 'sender' && <Sender roomId={roomId} goBack={() => setRole('select')} />}
     </div>
   );
