@@ -56,7 +56,7 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection (With tweaked spacing and smaller cards) ---
+// --- SCREEN: Role Selection (Mobile Compressed / PC Unchanged) ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -67,48 +67,49 @@ function RoleSelection({ setRole, setRoomId }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] p-4 md:p-6 max-w-5xl mx-auto text-center relative">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] py-2 px-4 md:p-6 max-w-5xl mx-auto text-center relative">
       
-      {/* HEADER: Added massive mb-10/md:mb-14 to create the 2-3 lines of spacing */}
-      <div className="flex flex-col items-center mb-8 md:mb-12">
+      {/* HEADER: Compressed mobile margins (mb-6) but PC stays large (md:mb-14) */}
+      <div className="flex flex-col items-center mb-6 md:mb-12">
         <img 
           src="./logo.jpg" 
           alt="Zetcam" 
-          className="w-48 md:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all mb-10 md:mb-14" 
+          className="w-48 md:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all mb-6 md:mb-14" 
         />
-        <div className="space-y-2 md:space-y-3">
+        <div className="space-y-1 md:space-y-3">
           <h1 className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">
             Welcome to Zetcam
           </h1>
-          <p className="text-gray-400 text-sm md:text-base font-medium">Select a device mode to begin</p>
+          <p className="text-gray-400 text-xs md:text-base font-medium">Select a device mode to begin</p>
         </div>
       </div>
 
-      {/* CARDS GRID: Increased gap significantly (gap-10 md:gap-16) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 w-full max-w-3xl mb-10 px-4 md:px-8">
+      {/* CARDS GRID: Compressed mobile gap (gap-4) but PC stays wide (md:gap-16) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16 w-full max-w-3xl mb-6 md:mb-10 px-4 md:px-8">
         
-        {/* PC Card: Shrunk padding and text sizes to make the rectangle smaller */}
-        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-5 md:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
-          <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-4 md:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]">
-            <Monitor className="w-7 h-7 md:w-8 md:h-8" />
+        {/* PC Card: Shrunk mobile padding (p-4), icon size (w-12), and text sizes. PC (md:) stays exactly the same. */}
+        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-4 md:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-2 md:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]">
+            <Monitor className="w-6 h-6 md:w-8 md:h-8" />
           </div>
-          <h2 className="text-lg md:text-xl font-bold mb-2 text-white">I am the PC</h2>
-          <p className="text-gray-400 text-xs md:text-sm text-center">Receive video and control the camera remotely.</p>
+          <h2 className="text-base md:text-xl font-bold mb-1 md:mb-2 text-white">I am the PC</h2>
+          <p className="text-gray-400 text-[11px] md:text-sm text-center leading-snug">Receive video and control the camera remotely.</p>
         </button>
 
-        {/* Camera Card: Shrunk padding and text sizes to make the rectangle smaller */}
-        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-5 md:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
-          <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-4 md:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]">
-            <Smartphone className="w-7 h-7 md:w-8 md:h-8" />
+        {/* Camera Card: Shrunk mobile padding (p-4), icon size (w-12), and text sizes. PC (md:) stays exactly the same. */}
+        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-4 md:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-2 md:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]">
+            <Smartphone className="w-6 h-6 md:w-8 md:h-8" />
           </div>
-          <h2 className="text-lg md:text-xl font-bold mb-2 text-white">I am the Camera</h2>
-          <p className="text-gray-400 text-xs md:text-sm text-center">Broadcast video. You'll need a code from the PC.</p>
+          <h2 className="text-base md:text-xl font-bold mb-1 md:mb-2 text-white">I am the Camera</h2>
+          <p className="text-gray-400 text-[11px] md:text-sm text-center leading-snug">Broadcast video. You'll need a code from the PC.</p>
         </button>
       </div>
 
+      {/* OBS Guide Button: Slightly smaller on mobile to save space */}
       <button 
         onClick={() => setShowGuide(true)} 
-        className="flex items-center gap-2 px-6 py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-sm md:text-base"
+        className="flex items-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs md:text-base mt-2 md:mt-0"
       >
         <Info className="w-4 h-4 md:w-5 md:h-5" /> How to connect to OBS Studio
       </button>
