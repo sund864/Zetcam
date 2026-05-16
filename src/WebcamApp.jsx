@@ -30,7 +30,7 @@ const VideoPlayer = ({ stream, isLocal = false, lowLight = false, rotation = 0 }
   );
 };
 
-// --- MAIN COMPONENT ---
+// --- MAIN COMPONENT (Background updated to blurry dark gradient) ---
 export default function WebcamApp() {
   const [role, setRole] = useState('select'); 
   const [roomId, setRoomId] = useState('');
@@ -45,18 +45,36 @@ export default function WebcamApp() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans selection:bg-[#ff3b3b]/30 overflow-hidden">
-      {role === 'select' && <RoleSelection setRole={setRole} setRoomId={setRoomId} />}
-      {role === 'receiver' && <Receiver roomId={roomId} goBack={() => {
-        window.history.replaceState({}, document.title, window.location.pathname);
-        setRole('select');
-      }} />}
-      {role === 'sender' && <Sender roomId={roomId} goBack={() => setRole('select')} />}
+    // Main container is relative, base background remains dark but slightly tinted
+    <div className="min-h-screen bg-[#080108] text-white font-sans selection:bg-[#ff3b3b]/30 overflow-hidden relative">
+      
+      {/* --- BLURRY GRADIENT BACKGROUND LAYER --- */}
+      {/* We create dynamic, blurry blobs of color and fix them to the background.
+          pointer-events-none ensures they don't interfere with clicks. */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        {/* Top Left: Blurred Purple Blob */}
+        <div className="absolute -top-48 -left-48 w-full h-full bg-[#9933ff]/15 rounded-full blur-[180px]"></div>
+        {/* Bottom Right: Blurred Dark Red/Magenta Blob */}
+        <div className="absolute -bottom-48 -right-48 w-full h-full bg-[#ff1493]/10 rounded-full blur-[180px]"></div>
+        {/* Centered ambient glow */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 w-96 h-96 mx-auto bg-black/60 rounded-full blur-[100px]"></div>
+      </div>
+
+      {/* --- CONTENT LAYER --- */}
+      {/* Set a z-index to ensure content sits above the background blur */}
+      <div className="relative z-10">
+        {role === 'select' && <RoleSelection setRole={setRole} setRoomId={setRoomId} />}
+        {role === 'receiver' && <Receiver roomId={roomId} goBack={() => {
+          window.history.replaceState({}, document.title, window.location.pathname);
+          setRole('select');
+        }} />}
+        {role === 'sender' && <Sender roomId={roomId} goBack={() => setRole('select')} />}
+      </div>
     </div>
   );
 }
 
-// --- SCREEN: Role Selection (Now fully responsive for Mobile Landscape!) ---
+// --- SCREEN: Role Selection (Responsive Mobile Landscape/PC) ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -69,7 +87,7 @@ function RoleSelection({ setRole, setRoomId }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] py-2 px-4 landscape:py-1 md:p-6 md:landscape:p-6 max-w-5xl mx-auto text-center relative">
       
-      {/* HEADER: Shrinks drastically on mobile landscape, stays large on PC */}
+      {/* HEADER: Dynamic sizing for mobile landscape vs PC */}
       <div className="flex flex-col items-center mb-6 landscape:mb-2 md:mb-12 md:landscape:mb-12">
         <img 
           src="./logo.jpg" 
@@ -88,7 +106,7 @@ function RoleSelection({ setRole, setRoomId }) {
       <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-4 landscape:gap-3 md:gap-16 md:landscape:gap-16 w-full max-w-3xl mb-6 landscape:mb-3 md:mb-10 md:landscape:mb-10 px-4 landscape:px-2 md:px-8 md:landscape:px-8">
         
         {/* PC Card */}
-        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
+        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111]/90 backdrop-blur-sm border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
           <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]">
             <Monitor className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" />
           </div>
@@ -97,7 +115,7 @@ function RoleSelection({ setRole, setRoomId }) {
         </button>
 
         {/* Camera Card */}
-        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
+        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111]/90 backdrop-blur-sm border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
           <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]">
             <Smartphone className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" />
           </div>
@@ -108,7 +126,7 @@ function RoleSelection({ setRole, setRoomId }) {
 
       <button 
         onClick={() => setShowGuide(true)} 
-        className="flex items-center gap-2 px-5 py-2.5 landscape:px-4 landscape:py-1.5 md:px-6 md:py-3 md:landscape:px-6 md:landscape:py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs landscape:text-[10px] md:text-base md:landscape:text-base mt-2 landscape:mt-0 md:mt-0"
+        className="flex items-center gap-2 px-5 py-2.5 landscape:px-4 landscape:py-1.5 md:px-6 md:py-3 md:landscape:px-6 md:landscape:py-3 bg-[#111]/90 backdrop-blur-sm hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs landscape:text-[10px] md:text-base md:landscape:text-base mt-2 landscape:mt-0 md:mt-0"
       >
         <Info className="w-4 h-4 landscape:w-3 landscape:h-3 md:w-5 md:h-5 md:landscape:w-5 md:landscape:h-5" /> How to connect to OBS Studio
       </button>
@@ -241,7 +259,7 @@ function Receiver({ roomId, goBack }) {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#050505] relative group" ref={containerRef}>
+    <div className="flex flex-col h-screen w-full relative group" ref={containerRef}>
       <div className="flex-1 w-full h-full relative p-4">
         {remoteStream && !isPhoneSwitching ? (
           <VideoPlayer stream={remoteStream} isLocal={false} lowLight={lowLightMode} rotation={rotation} />
