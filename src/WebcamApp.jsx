@@ -56,7 +56,7 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection (Mobile Compressed / PC Unchanged) ---
+// --- SCREEN: Role Selection (Now fully responsive for Mobile Landscape!) ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -67,51 +67,50 @@ function RoleSelection({ setRole, setRoomId }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[100dvh] py-2 px-4 md:p-6 max-w-5xl mx-auto text-center relative">
+    <div className="flex flex-col items-center justify-center min-h-[100dvh] py-2 px-4 landscape:py-1 md:p-6 md:landscape:p-6 max-w-5xl mx-auto text-center relative">
       
-      {/* HEADER: Compressed mobile margins (mb-6) but PC stays large (md:mb-14) */}
-      <div className="flex flex-col items-center mb-6 md:mb-12">
+      {/* HEADER: Shrinks drastically on mobile landscape, stays large on PC */}
+      <div className="flex flex-col items-center mb-6 landscape:mb-2 md:mb-12 md:landscape:mb-12">
         <img 
           src="./logo.jpg" 
           alt="Zetcam" 
-          className="w-48 md:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all mb-6 md:mb-14" 
+          className="w-48 landscape:w-20 md:w-64 md:landscape:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all mb-6 landscape:mb-2 md:mb-14 md:landscape:mb-14" 
         />
-        <div className="space-y-1 md:space-y-3">
-          <h1 className="text-xl md:text-2xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">
+        <div className="space-y-1 landscape:space-y-0 md:space-y-3 md:landscape:space-y-3">
+          <h1 className="text-xl landscape:text-lg md:text-2xl md:landscape:text-2xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">
             Welcome to Zetcam
           </h1>
-          <p className="text-gray-400 text-xs md:text-base font-medium">Select a device mode to begin</p>
+          <p className="text-gray-400 text-xs landscape:text-[10px] md:text-base md:landscape:text-base font-medium">Select a device mode to begin</p>
         </div>
       </div>
 
-      {/* CARDS GRID: Compressed mobile gap (gap-4) but PC stays wide (md:gap-16) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16 w-full max-w-3xl mb-6 md:mb-10 px-4 md:px-8">
+      {/* CARDS GRID: Stacks vertically in mobile portrait, sits side-by-side in mobile landscape and PC */}
+      <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-4 landscape:gap-3 md:gap-16 md:landscape:gap-16 w-full max-w-3xl mb-6 landscape:mb-3 md:mb-10 md:landscape:mb-10 px-4 landscape:px-2 md:px-8 md:landscape:px-8">
         
-        {/* PC Card: Shrunk mobile padding (p-4), icon size (w-12), and text sizes. PC (md:) stays exactly the same. */}
-        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-4 md:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
-          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-2 md:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]">
-            <Monitor className="w-6 h-6 md:w-8 md:h-8" />
+        {/* PC Card */}
+        <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
+          <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]">
+            <Monitor className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" />
           </div>
-          <h2 className="text-base md:text-xl font-bold mb-1 md:mb-2 text-white">I am the PC</h2>
-          <p className="text-gray-400 text-[11px] md:text-sm text-center leading-snug">Receive video and control the camera remotely.</p>
+          <h2 className="text-base landscape:text-sm md:text-xl md:landscape:text-xl font-bold mb-1 landscape:mb-0 md:mb-2 md:landscape:mb-2 text-white">I am the PC</h2>
+          <p className="text-gray-400 text-[11px] landscape:text-[9px] md:text-sm md:landscape:text-sm text-center leading-snug">Receive video and control the camera remotely.</p>
         </button>
 
-        {/* Camera Card: Shrunk mobile padding (p-4), icon size (w-12), and text sizes. PC (md:) stays exactly the same. */}
-        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-4 md:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
-          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-2 md:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]">
-            <Smartphone className="w-6 h-6 md:w-8 md:h-8" />
+        {/* Camera Card */}
+        <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111] border border-[#222] rounded-3xl hover:bg-[#151515] hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
+          <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]">
+            <Smartphone className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" />
           </div>
-          <h2 className="text-base md:text-xl font-bold mb-1 md:mb-2 text-white">I am the Camera</h2>
-          <p className="text-gray-400 text-[11px] md:text-sm text-center leading-snug">Broadcast video. You'll need a code from the PC.</p>
+          <h2 className="text-base landscape:text-sm md:text-xl md:landscape:text-xl font-bold mb-1 landscape:mb-0 md:mb-2 md:landscape:mb-2 text-white">I am the Camera</h2>
+          <p className="text-gray-400 text-[11px] landscape:text-[9px] md:text-sm md:landscape:text-sm text-center leading-snug">Broadcast video. You'll need a code from the PC.</p>
         </button>
       </div>
 
-      {/* OBS Guide Button: Slightly smaller on mobile to save space */}
       <button 
         onClick={() => setShowGuide(true)} 
-        className="flex items-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs md:text-base mt-2 md:mt-0"
+        className="flex items-center gap-2 px-5 py-2.5 landscape:px-4 landscape:py-1.5 md:px-6 md:py-3 md:landscape:px-6 md:landscape:py-3 bg-[#111] hover:bg-[#222] text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs landscape:text-[10px] md:text-base md:landscape:text-base mt-2 landscape:mt-0 md:mt-0"
       >
-        <Info className="w-4 h-4 md:w-5 md:h-5" /> How to connect to OBS Studio
+        <Info className="w-4 h-4 landscape:w-3 landscape:h-3 md:w-5 md:h-5 md:landscape:w-5 md:landscape:h-5" /> How to connect to OBS Studio
       </button>
 
       {/* OBS GUIDE MODAL */}
@@ -524,15 +523,15 @@ function Sender({ roomId, goBack }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] p-6 max-w-md mx-auto relative">
       <button onClick={goBack} className="absolute top-6 left-6 text-sm bg-[#111] hover:bg-[#222] border border-[#333] px-5 py-2.5 rounded-full font-bold transition-all uppercase tracking-wider text-white">← Back</button>
-      <div className="w-full bg-[#111]/90 backdrop-blur-xl p-10 rounded-[2.5rem] border border-[#333] shadow-[0_0_40px_rgba(255,20,147,0.15)]">
-        <div className="w-20 h-20 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-6 mx-auto shadow-[0_0_20px_rgba(255,20,147,0.4)]"><Smartphone className="w-10 h-10" /></div>
-        <h2 className="text-3xl font-extrabold text-center mb-2 text-white">Link Camera</h2>
-        <p className="text-gray-400 text-center mb-10 text-sm font-medium">Enter the 5-digit code shown on your PC.</p>
-        <form onSubmit={handleJoin} className="space-y-6">
-          <input type="text" maxLength="5" placeholder="00000" value={inputCode} onChange={(e) => setInputCode(e.target.value.replace(/\D/g, ''))} className="w-full bg-[#050505] border-2 border-[#333] focus:border-[#ff3b3b] focus:shadow-[0_0_15px_rgba(255,59,59,0.3)] rounded-2xl px-6 py-5 text-center text-5xl font-mono font-black tracking-[0.25em] text-white outline-none transition-all shadow-inner" required disabled={isConnecting} />
+      <div className="w-full bg-[#111]/90 backdrop-blur-xl p-10 landscape:p-6 md:p-10 rounded-[2.5rem] border border-[#333] shadow-[0_0_40px_rgba(255,20,147,0.15)]">
+        <div className="w-20 h-20 landscape:w-12 landscape:h-12 md:w-20 md:h-20 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-6 landscape:mb-2 md:mb-6 mx-auto shadow-[0_0_20px_rgba(255,20,147,0.4)]"><Smartphone className="w-10 h-10 landscape:w-6 landscape:h-6 md:w-10 md:h-10" /></div>
+        <h2 className="text-3xl landscape:text-xl md:text-3xl font-extrabold text-center mb-2 text-white">Link Camera</h2>
+        <p className="text-gray-400 text-center mb-10 landscape:mb-4 md:mb-10 text-sm landscape:text-xs md:text-sm font-medium">Enter the 5-digit code shown on your PC.</p>
+        <form onSubmit={handleJoin} className="space-y-6 landscape:space-y-3 md:space-y-6">
+          <input type="text" maxLength="5" placeholder="00000" value={inputCode} onChange={(e) => setInputCode(e.target.value.replace(/\D/g, ''))} className="w-full bg-[#050505] border-2 border-[#333] focus:border-[#ff3b3b] focus:shadow-[0_0_15px_rgba(255,59,59,0.3)] rounded-2xl px-6 py-5 landscape:py-2 md:py-5 text-center text-5xl landscape:text-3xl md:text-5xl font-mono font-black tracking-[0.25em] text-white outline-none transition-all shadow-inner" required disabled={isConnecting} />
           {errorMsg && <div className="bg-[#ff3b3b]/10 border border-[#ff3b3b]/50 text-[#ff3b3b] p-4 rounded-2xl text-sm font-bold text-center">{errorMsg}</div>}
-          <button type="submit" disabled={inputCode.length !== 5 || isConnecting} className="w-full bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] hover:from-[#ff3b3b] hover:to-[#ff1493] disabled:from-[#333] disabled:to-[#333] disabled:text-gray-500 text-white font-extrabold text-lg py-5 rounded-2xl transition-all flex justify-center items-center gap-3 shadow-[0_0_20px_rgba(255,20,147,0.4)] uppercase tracking-widest">
-            {isConnecting ? <><RefreshCw className="w-6 h-6 animate-spin" /> Linking...</> : 'Go Live'}
+          <button type="submit" disabled={inputCode.length !== 5 || isConnecting} className="w-full bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] hover:from-[#ff3b3b] hover:to-[#ff1493] disabled:from-[#333] disabled:to-[#333] disabled:text-gray-500 text-white font-extrabold text-lg landscape:text-sm md:text-lg py-5 landscape:py-2 md:py-5 rounded-2xl transition-all flex justify-center items-center gap-3 shadow-[0_0_20px_rgba(255,20,147,0.4)] uppercase tracking-widest">
+            {isConnecting ? <><RefreshCw className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-6 md:h-6 animate-spin" /> Linking...</> : 'Go Live'}
           </button>
         </form>
       </div>
