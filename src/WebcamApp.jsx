@@ -56,7 +56,7 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection (Now with OBS Guide Modal) ---
+// --- SCREEN: Role Selection (With Personalized OBS Guide) ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -135,7 +135,7 @@ function RoleSelection({ setRole, setRoomId }) {
                 <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 3: Configure the Link</h3>
                 <p className="mb-2">In the properties window, set the following:</p>
                 <ul className="list-disc pl-5 space-y-2 text-sm">
-                  <li><strong>URL:</strong> Paste your website link and add your code to the end: <br/> <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b] break-all block mt-1">https://your-github-username.github.io/Zetcam/?room=77777</code></li>
+                  <li><strong>URL:</strong> Copy your personalized link and paste it into OBS: <br/> <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b] break-all block mt-1 select-all">https://sund864.github.io/Zetcam/?room=77777</code></li>
                   <li><strong>Width:</strong> <code className="text-white">1920</code> | <strong>Height:</strong> <code className="text-white">1080</code></li>
                   <li><strong>Custom CSS:</strong> Delete all text in this box.</li>
                   <li>Check the box for <strong>Control audio via OBS</strong> to route your phone microphone directly into your audio mixer.</li>
@@ -144,7 +144,7 @@ function RoleSelection({ setRole, setRoomId }) {
 
               <section>
                 <h3 className="text-[#9933ff] font-bold text-lg mb-2">Step 4: Go Live</h3>
-                <p>Open this app on your phone, tap <strong>I am the Camera</strong>, type in your code, and hit <strong>Go Live</strong>. Your video will instantly appear in OBS!</p>
+                <p>Open this app on your phone, tap <strong>I am the Camera</strong>, type in your code (e.g., 77777), and hit <strong>Go Live</strong>. Your video will instantly appear in OBS!</p>
               </section>
             </div>
             
