@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, Battery, Mic, MicOff, Settings, Sun, Compass, LogOut } from 'lucide-react';
+import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, Battery, Mic, MicOff, Settings, Sun, LogOut } from 'lucide-react';
 import Peer from 'peerjs';
 
 // --- HELPER COMPONENT: Video Player ---
-const VideoPlayer = ({ stream, isLocal = false, horizonAngle = 0, horizonLockEnabled = false }) => {
+const VideoPlayer = ({ stream, isLocal = false }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -12,10 +12,6 @@ const VideoPlayer = ({ stream, isLocal = false, horizonAngle = 0, horizonLockEna
     }
   }, [stream]);
 
-  const transformStyle = horizonLockEnabled 
-    ? `rotate(${horizonAngle}deg) scale(1.3)` 
-    : 'rotate(0deg) scale(1)';
-
   return (
     <div className="w-full h-full overflow-hidden rounded-lg shadow-2xl bg-black flex items-center justify-center">
       <video
@@ -23,10 +19,6 @@ const VideoPlayer = ({ stream, isLocal = false, horizonAngle = 0, horizonLockEna
         autoPlay
         playsInline
         muted={isLocal}
-        style={{ 
-          transform: transformStyle, 
-          transition: 'transform 0.1s linear'
-        }}
         className="w-full h-full object-contain"
       />
     </div>
@@ -87,9 +79,8 @@ function RoleSelection({ setRole, setRoomId }) {
 function Receiver({ roomId, goBack }) {
   const [remoteStream, setRemoteStream] = useState(null);
   const [status, setStatus] = useState('Waiting for camera...');
-  const [horizonAngle, setHorizonAngle] = useState(0);
-  const [horizonLockEnabled, setHorizonLockEnabled] = useState(false);
   const [isPhoneSwitching, setIsPhoneSwitching] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   
   const peerRef = useRef(null);
   const activeCallRef = useRef(null);
@@ -114,18 +105,12 @@ function Receiver({ roomId, goBack }) {
       call.on('close', () => {
         setStatus('Camera disconnected. Waiting...');
         setRemoteStream(null);
-        setHorizonLockEnabled(false);
       });
     });
 
     peer.on('connection', (conn) => {
       activeDataConnRef.current = conn;
       conn.on('data', (data) => {
-        if (data.type === 'HORIZON_DATA') {
-          setHorizonLockEnabled(data.enabled);
-          if (data.enabled) setHorizonAngle(data.angle);
-          else setHorizonAngle(0);
-        }
         if (data.type === 'PHONE_SWITCHING_START') {
           setIsPhoneSwitching(true);
         }
@@ -145,14 +130,15 @@ function Receiver({ roomId, goBack }) {
       activeDataConnRef.current = null;
     }
     setRemoteStream(null);
-    setHorizonLockEnabled(false);
     setStatus('Connection ended by PC. Waiting for camera...');
+    setShowSettings(false);
   };
 
   const handlePcToggleCamera = () => {
     if (activeDataConnRef.current && activeDataConnRef.current.open) {
       setIsPhoneSwitching(true);
       activeDataConnRef.current.send({ type: 'REMOTE_TOGGLE_CAMERA' });
+      setShowSettings(false);
     }
   };
 
@@ -169,7 +155,7 @@ function Receiver({ roomId, goBack }) {
     <div className="flex flex-col h-screen w-full bg-black relative group" ref={containerRef}>
       <div className="flex-1 w-full h-full relative p-4">
         {remoteStream && !isPhoneSwitching ? (
-          <VideoPlayer stream={remoteStream} isLocal={false} horizonAngle={horizonAngle} horizonLockEnabled={horizonLockEnabled} />
+          <VideoPlayer stream={remoteStream} isLocal={false} />
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-stone-500">
             <RefreshCw className={`w-16 h-16 mb-6 opacity-40 ${isPhoneSwitching ? 'animate-spin text-amber-500' : ''}`} />
@@ -178,15 +164,9 @@ function Receiver({ roomId, goBack }) {
             </p>
           </div>
         )}
-        
-        {remoteStream && !isPhoneSwitching && horizonLockEnabled && (
-          <div className="absolute top-8 left-8 flex items-center gap-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-amber-500/30 text-amber-500 text-sm font-bold shadow-xl">
-             <Compass className="w-4 h-4 animate-spin-slow" />
-             <span>Horizon Lock Active</span>
-          </div>
-        )}
       </div>
 
+      {/* Top Header Controls (Back Button & Code) */}
       <div className={`absolute inset-x-0 top-0 p-6 flex justify-between items-start bg-gradient-to-b from-black/80 to-transparent transition-opacity duration-300 ${remoteStream && !isPhoneSwitching ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
         <button onClick={goBack} className="text-sm bg-white/10 hover:bg-amber-500 hover:text-stone-900 px-5 py-2.5 rounded-full backdrop-blur-md font-bold transition-all uppercase tracking-wider">← Leave Room</button>
         {!remoteStream && (
@@ -198,17 +178,45 @@ function Receiver({ roomId, goBack }) {
         )}
       </div>
 
+      {/* PC Side Hideable Menu (Top Right) */}
+      {remoteStream && !isPhoneSwitching && (
+        <div className="absolute top-6 right-6 flex flex-col items-end gap-3 z-50">
+          <button 
+            onClick={() => setShowSettings(!showSettings)} 
+            className="p-3 bg-black/50 hover:bg-black/80 backdrop-blur rounded-full text-white border border-white/10 transition-all shadow-xl"
+            title="Controls"
+          >
+            <Settings className="w-6 h-6" />
+          </button>
+
+          {showSettings && (
+            <div className="bg-stone-900/95 backdrop-blur-xl border border-stone-700 p-4 rounded-3xl shadow-2xl w-64 animate-in fade-in slide-in-from-top-4 flex flex-col gap-2">
+              <h3 className="text-stone-400 text-xs font-bold uppercase tracking-wider mb-2 px-2">PC Controls</h3>
+              
+              <button 
+                onClick={handlePcToggleCamera} 
+                disabled={isPhoneSwitching} 
+                className="flex items-center gap-3 px-4 py-3 bg-stone-800 hover:bg-amber-500 hover:text-stone-900 disabled:opacity-50 rounded-2xl font-bold text-sm transition-all text-white"
+              >
+                <SwitchCamera className="w-5 h-5" /> Switch Phone Lens
+              </button>
+              
+              <button 
+                onClick={handlePcDisconnect} 
+                className="flex items-center gap-3 px-4 py-3 bg-stone-800 hover:bg-rose-600 hover:text-white rounded-2xl font-bold text-sm transition-all text-rose-500"
+              >
+                <LogOut className="w-5 h-5" /> Disconnect Camera
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Persistent Fullscreen Toggle (Bottom Right) */}
       {remoteStream && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-stone-900/80 backdrop-blur-xl border border-stone-700 px-6 py-4 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
-          <button onClick={handlePcDisconnect} className="flex items-center gap-2 px-4 py-2 bg-rose-600/20 text-rose-500 hover:bg-rose-600 hover:text-white rounded-full font-bold text-xs transition-all border border-rose-500/30 uppercase tracking-wide">
-            <LogOut className="w-4 h-4" /> Disconnect
-          </button>
-          <button onClick={handlePcToggleCamera} disabled={isPhoneSwitching} className="flex items-center gap-2 px-4 py-2 bg-amber-500/20 text-amber-500 hover:bg-amber-500 hover:text-stone-900 disabled:opacity-50 rounded-full font-bold text-xs transition-all border border-amber-500/30 uppercase tracking-wide">
-            <SwitchCamera className="w-4 h-4" /> Switch Lens
-          </button>
-          <div className="w-px h-6 bg-stone-700"></div>
-          <button onClick={toggleFullScreen} className="p-2.5 bg-white/10 hover:bg-amber-500 hover:text-black rounded-full text-white transition-all" title="Toggle Fullscreen">
-            <Maximize2 className="w-4 h-4" />
+        <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-40">
+          <button onClick={toggleFullScreen} className="bg-black/60 hover:bg-amber-500 hover:text-black backdrop-blur-md p-4 rounded-full text-white transition-all shadow-lg border border-white/10" title="Toggle Fullscreen">
+            <Maximize2 className="w-8 h-8" />
           </button>
         </div>
       )}
@@ -229,7 +237,6 @@ function Sender({ roomId, goBack }) {
   const [micEnabled, setMicEnabled] = useState(false);
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [batterySaver, setBatterySaver] = useState(false);
-  const [horizonLock, setHorizonLock] = useState(false);
   
   const [qualityMode, setQualityMode] = useState('high'); 
   const [showSettings, setShowSettings] = useState(false);
@@ -240,8 +247,10 @@ function Sender({ roomId, goBack }) {
   const peerRef = useRef(null);
   const callRef = useRef(null);
   const dataConnRef = useRef(null); 
-  const horizonLockRef = useRef(horizonLock); 
+  const isFrontCameraRef = useRef(isFrontCamera);
   const targetRoomIdRef = useRef(roomId);
+
+  useEffect(() => { isFrontCameraRef.current = isFrontCamera; }, [isFrontCamera]);
 
   const checkCameraCapabilities = (stream) => {
     if (!stream) return;
@@ -265,26 +274,6 @@ function Sender({ roomId, goBack }) {
       setExposureSupported(false);
     }
   };
-
-  useEffect(() => {
-    horizonLockRef.current = horizonLock;
-    const handleOrientation = (event) => {
-      if (!horizonLockRef.current || !dataConnRef.current) return;
-      let angle = 0;
-      const screenOrientation = window.orientation || window.screen?.orientation?.angle || 0;
-      if (screenOrientation === 90) angle = event.beta;
-      else if (screenOrientation === -90 || screenOrientation === 270) angle = -event.beta;
-      else angle = event.gamma;
-      dataConnRef.current.send({ type: 'HORIZON_DATA', enabled: true, angle: -angle });
-    };
-
-    if (horizonLock) window.addEventListener('deviceorientation', handleOrientation);
-    else {
-      window.removeEventListener('deviceorientation', handleOrientation);
-      if (dataConnRef.current) dataConnRef.current.send({ type: 'HORIZON_DATA', enabled: false, angle: 0 });
-    }
-    return () => window.removeEventListener('deviceorientation', handleOrientation);
-  }, [horizonLock]);
 
   const stopStream = () => {
     if (localStream) {
@@ -372,7 +361,6 @@ function Sender({ roomId, goBack }) {
     if (inputCode.length === 5) startCameraAndConnect(inputCode);
   };
 
-  // Robustly switches the camera safely without stale state race conditions
   const executeCameraSwitch = () => {
     setIsFrontCamera(prev => {
       const nextMode = !prev;
@@ -417,18 +405,6 @@ function Sender({ roomId, goBack }) {
       } catch (err) { console.error("Torch error:", err); }
     } else {
       alert("Flashlight is not supported on this camera lens.");
-    }
-  };
-
-  const toggleHorizonLock = async () => {
-    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-      try {
-        const permissionState = await DeviceOrientationEvent.requestPermission();
-        if (permissionState === 'granted') setHorizonLock(!horizonLock);
-        else alert("Gyroscope permission denied.");
-      } catch (error) { alert("Failed to access Gyroscope."); }
-    } else {
-      setHorizonLock(!horizonLock);
     }
   };
 
@@ -496,19 +472,19 @@ function Sender({ roomId, goBack }) {
           )}
         </div>
 
-        <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent flex justify-center gap-3 md:gap-6 items-center pb-safe">
+        <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent flex justify-center gap-4 md:gap-8 items-center pb-safe">
           <button onClick={toggleMic} className={`p-4 rounded-full transition-all shadow-xl backdrop-blur-md ${micEnabled ? 'bg-white/20 text-white border-white/30' : 'bg-rose-500/20 text-rose-500 border-rose-500/30'} border focus:outline-none`}>
             {micEnabled ? <Mic className="w-6 h-6" /> : <MicOff className="w-6 h-6" />}
           </button>
-          <button onClick={toggleHorizonLock} title="Horizon Lock" className={`p-4 rounded-full transition-all shadow-xl backdrop-blur-md ${horizonLock ? 'bg-amber-500 text-stone-900 border-amber-400' : 'bg-white/10 text-white border-white/20'} border focus:outline-none`}>
-            <Compass className="w-6 h-6" />
-          </button>
+          
           <button onClick={() => { stopStream(); goBack(); }} className="p-5 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-all shadow-rose-600/50 shadow-2xl border border-rose-500 focus:outline-none mx-2">
             <VideoOff className="w-8 h-8" />
           </button>
+
           <button onClick={executeCameraSwitch} className="p-4 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all shadow-xl backdrop-blur-md border border-white/20 focus:outline-none">
             {isConnecting ? <RefreshCw className="w-6 h-6 animate-spin text-amber-500" /> : <SwitchCamera className="w-6 h-6" />}
           </button>
+
           <button onClick={toggleTorch} className={`p-4 rounded-full transition-all shadow-xl backdrop-blur-md ${torchEnabled ? 'bg-amber-500 text-stone-900 border-amber-400' : 'bg-white/10 text-white border-white/20'} border focus:outline-none`}>
             <Sun className="w-6 h-6" />
           </button>
