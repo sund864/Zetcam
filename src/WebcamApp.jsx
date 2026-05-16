@@ -1,20 +1,3 @@
-
-
-Skip to content
-Using Gmail with screen readers
-1 of 419
-(no subject)
-Inbox
-
-Souradip Kundu <kundusouradip179@gmail.com>
-Attachments
-18:07 (0 minutes ago)
-to me
-
-
- One attachment
-  •  Scanned by Gmail
-```react
 import React, { useState, useEffect, useRef } from 'react';
 import { Monitor, Smartphone, Maximize2, SwitchCamera, VideoOff, RefreshCw, Battery, Mic, MicOff, Settings, Sun, Compass } from 'lucide-react';
 import Peer from 'peerjs';
@@ -204,7 +187,6 @@ function Sender({ goBack }) {
   const [localStream, setLocalStream] = useState(null);
   const [connected, setConnected] = useState(false);
   
-  // Advanced Features State
   const [isFrontCamera, setIsFrontCamera] = useState(false);
   const [micEnabled, setMicEnabled] = useState(false);
   const [torchEnabled, setTorchEnabled] = useState(false);
@@ -214,7 +196,6 @@ function Sender({ goBack }) {
   const [qualityMode, setQualityMode] = useState('high'); 
   const [showSettings, setShowSettings] = useState(false);
 
-  // Exposure State
   const [exposureSupported, setExposureSupported] = useState(false);
   const [exposureSettings, setExposureSettings] = useState({ min: -3, max: 3, step: 0.1, val: 0 });
 
@@ -223,7 +204,6 @@ function Sender({ goBack }) {
   const dataConnRef = useRef(null); 
   const horizonLockRef = useRef(horizonLock); 
 
-  // Read camera hardware capabilities
   const checkCameraCapabilities = (stream) => {
     if (!stream) return;
     const track = stream.getVideoTracks()[0];
@@ -313,7 +293,6 @@ function Sender({ goBack }) {
       stream.getAudioTracks().forEach(track => track.enabled = micEnabled);
       setLocalStream(stream);
       
-      // Check if exposure control is supported on this lens
       setTimeout(() => checkCameraCapabilities(stream), 500);
 
       const peer = new Peer();
@@ -474,11 +453,9 @@ function Sender({ goBack }) {
             </div>
           </div>
 
-          {/* Extended Settings Menu */}
           {showSettings && (
             <div className="absolute top-20 right-6 bg-stone-900/95 backdrop-blur-xl border border-stone-700 p-4 rounded-3xl shadow-2xl w-72 z-40 animate-in fade-in slide-in-from-top-4">
               
-              {/* Quality Settings */}
               <h3 className="text-stone-400 text-xs font-bold uppercase tracking-wider mb-3 px-2">Video Quality</h3>
               <div className="flex flex-col gap-2 mb-4">
                 <button onClick={() => handleQualityChange('high')} className={`p-3 rounded-2xl text-sm font-bold text-left transition-all ${qualityMode === 'high' ? 'bg-amber-500 text-stone-900' : 'bg-stone-800 text-white hover:bg-stone-700'}`}>
@@ -489,7 +466,6 @@ function Sender({ goBack }) {
                 </button>
               </div>
 
-              {/* Exposure Control */}
               <div className="border-t border-stone-800 pt-4 mt-2">
                 <h3 className="text-stone-400 text-xs font-bold uppercase tracking-wider mb-3 px-2">Exposure</h3>
                 {exposureSupported ? (
@@ -517,7 +493,6 @@ function Sender({ goBack }) {
           )}
         </div>
 
-        {/* Bottom Control Bar */}
         <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black via-black/90 to-transparent flex justify-center gap-3 md:gap-6 items-center pb-safe">
           
           <button onClick={toggleMic} className={`p-4 rounded-full transition-all shadow-xl backdrop-blur-md ${micEnabled ? 'bg-white/20 text-white border-white/30' : 'bg-rose-500/20 text-rose-500 border-rose-500/30'} border focus:outline-none`}>
@@ -545,7 +520,6 @@ function Sender({ goBack }) {
     );
   }
 
-  // --- RENDER CONNECTION FORM ---
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] p-6 max-w-md mx-auto relative">
       <button onClick={goBack} className="absolute top-6 left-6 text-sm bg-stone-800 hover:bg-stone-700 px-5 py-2.5 rounded-full font-bold transition-all border border-stone-700 uppercase tracking-wider">← Back</button>
@@ -574,8 +548,3 @@ function Sender({ goBack }) {
     </div>
   );
 }
-
-
-```
-text.txt
-Displaying text.txt.
