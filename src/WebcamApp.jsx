@@ -45,18 +45,11 @@ export default function WebcamApp() {
   }, []);
 
   return (
-    // Base background lightened to a deep atmospheric plum/purple
     <div className="min-h-screen bg-[#160a1a] text-white font-sans selection:bg-[#ff3b3b]/30 overflow-hidden relative">
-      
-      {/* --- BLURRY GRADIENT BACKGROUND LAYER --- */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        {/* Top Left: Brighter Blurred Purple Blob */}
         <div className="absolute -top-48 -left-48 w-[120%] h-[120%] bg-[#9933ff]/20 rounded-full blur-[180px]"></div>
-        {/* Bottom Right: Brighter Blurred Dark Red/Magenta Blob */}
         <div className="absolute -bottom-48 -right-48 w-[120%] h-[120%] bg-[#ff1493]/20 rounded-full blur-[180px]"></div>
       </div>
-
-      {/* --- CONTENT LAYER --- */}
       <div className="relative z-10">
         {role === 'select' && <RoleSelection setRole={setRole} setRoomId={setRoomId} />}
         {role === 'receiver' && <Receiver roomId={roomId} goBack={() => {
@@ -69,7 +62,7 @@ export default function WebcamApp() {
   );
 }
 
-// --- SCREEN: Role Selection (Responsive Mobile Landscape/PC) ---
+// --- SCREEN: Role Selection ---
 function RoleSelection({ setRole, setRoomId }) {
   const [showGuide, setShowGuide] = useState(false);
 
@@ -81,100 +74,42 @@ function RoleSelection({ setRole, setRoomId }) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] py-2 px-4 landscape:py-1 md:p-6 md:landscape:p-6 max-w-5xl mx-auto text-center relative">
-      
-      {/* HEADER */}
       <div className="flex flex-col items-center mb-6 landscape:mb-2 md:mb-12 md:landscape:mb-12">
-        <img 
-          src="./logo.jpg" 
-          alt="Zetcam" 
-          className="w-48 landscape:w-20 md:w-64 md:landscape:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all mb-6 landscape:mb-2 md:mb-14 md:landscape:mb-14" 
-        />
+        <img src="./logo.jpg" alt="Zetcam" className="w-48 landscape:w-20 md:w-64 md:landscape:w-64 rounded-3xl shadow-[0_0_40px_rgba(255,220,235,0.6)] transition-all mb-6 landscape:mb-2 md:mb-14 md:landscape:mb-14" />
         <div className="space-y-1 landscape:space-y-0 md:space-y-3 md:landscape:space-y-3">
-          <h1 className="text-xl landscape:text-lg md:text-2xl md:landscape:text-2xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">
-            Welcome to Zetcam
-          </h1>
+          <h1 className="text-xl landscape:text-lg md:text-2xl md:landscape:text-2xl font-extrabold bg-gradient-to-r from-[#ff1493] to-[#ff3b3b] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(255,20,147,0.3)] leading-tight">Welcome to Zetcam</h1>
           <p className="text-gray-400 text-xs landscape:text-[10px] md:text-base md:landscape:text-base font-medium">Select a device mode to begin</p>
         </div>
       </div>
-
-      {/* CARDS GRID */}
       <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-4 landscape:gap-3 md:gap-16 md:landscape:gap-16 w-full max-w-3xl mb-6 landscape:mb-3 md:mb-10 md:landscape:mb-10 px-4 landscape:px-2 md:px-8 md:landscape:px-8">
-        
-        {/* PC Card */}
         <button onClick={handleSelectReceiver} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111]/80 backdrop-blur-md border border-[#222] rounded-3xl hover:bg-[#151515]/90 hover:border-[#ff3b3b] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff3b3b]/50">
-          <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]">
-            <Monitor className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" />
-          </div>
+          <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#9933ff]/20 to-[#ff3b3b]/20 border border-[#ff3b3b]/50 text-[#ff3b3b] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,59,59,0.5)]"><Monitor className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" /></div>
           <h2 className="text-base landscape:text-sm md:text-xl md:landscape:text-xl font-bold mb-1 landscape:mb-0 md:mb-2 md:landscape:mb-2 text-white">I am the PC</h2>
           <p className="text-gray-400 text-[11px] landscape:text-[9px] md:text-sm md:landscape:text-sm text-center leading-snug">Receive video and control the camera remotely.</p>
         </button>
-
-        {/* Camera Card */}
         <button onClick={() => setRole('sender')} className="group flex flex-col items-center p-4 landscape:p-2 md:p-6 md:landscape:p-6 bg-[#111]/80 backdrop-blur-md border border-[#222] rounded-3xl hover:bg-[#151515]/90 hover:border-[#ff1493] transition-all shadow-[0_0_40px_rgba(255,220,235,0.6)] hover:shadow-[0_0_60px_rgba(255,220,235,0.8)] text-left w-full focus:ring-4 focus:ring-[#ff1493]/50">
-          <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]">
-            <Smartphone className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" />
-          </div>
+          <div className="w-12 h-12 landscape:w-8 landscape:h-8 md:w-16 md:h-16 md:landscape:w-16 md:landscape:h-16 bg-gradient-to-br from-[#ff1493]/20 to-[#9933ff]/20 border border-[#ff1493]/50 text-[#ff1493] rounded-full flex items-center justify-center mb-2 landscape:mb-1 md:mb-5 md:landscape:mb-5 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(255,20,147,0.5)]"><Smartphone className="w-6 h-6 landscape:w-4 landscape:h-4 md:w-8 md:h-8 md:landscape:w-8 md:landscape:h-8" /></div>
           <h2 className="text-base landscape:text-sm md:text-xl md:landscape:text-xl font-bold mb-1 landscape:mb-0 md:mb-2 md:landscape:mb-2 text-white">I am the Camera</h2>
           <p className="text-gray-400 text-[11px] landscape:text-[9px] md:text-sm md:landscape:text-sm text-center leading-snug">Broadcast video. You'll need a code from the PC.</p>
         </button>
       </div>
-
-      <button 
-        onClick={() => setShowGuide(true)} 
-        className="flex items-center gap-2 px-5 py-2.5 landscape:px-4 landscape:py-1.5 md:px-6 md:py-3 md:landscape:px-6 md:landscape:py-3 bg-[#111]/80 backdrop-blur-md hover:bg-[#222]/90 text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs landscape:text-[10px] md:text-base md:landscape:text-base mt-2 landscape:mt-0 md:mt-0"
-      >
+      <button onClick={() => setShowGuide(true)} className="flex items-center gap-2 px-5 py-2.5 landscape:px-4 landscape:py-1.5 md:px-6 md:py-3 md:landscape:px-6 md:landscape:py-3 bg-[#111]/80 backdrop-blur-md hover:bg-[#222]/90 text-gray-300 hover:text-[#ff1493] border border-[#333] hover:border-[#ff1493] rounded-full font-bold transition-all shadow-[0_0_15px_rgba(255,220,235,0.2)] text-xs landscape:text-[10px] md:text-base md:landscape:text-base mt-2 landscape:mt-0 md:mt-0">
         <Info className="w-4 h-4 landscape:w-3 landscape:h-3 md:w-5 md:h-5 md:landscape:w-5 md:landscape:h-5" /> How to connect to OBS Studio
       </button>
 
-      {/* OBS GUIDE MODAL */}
       {showGuide && (
         <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-[#111] border border-[#333] rounded-3xl p-6 md:p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto shadow-[0_0_50px_rgba(255,20,147,0.2)] text-left relative animate-in fade-in zoom-in-95">
-            
-            <button 
-              onClick={() => setShowGuide(false)} 
-              className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-[#222] hover:bg-[#ff3b3b] text-gray-400 hover:text-white rounded-full transition-colors"
-            >
-              <X className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-
+            <button onClick={() => setShowGuide(false)} className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-[#222] hover:bg-[#ff3b3b] text-gray-400 hover:text-white rounded-full transition-colors"><X className="w-5 h-5 md:w-6 md:h-6" /></button>
             <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">OBS Studio Setup Guide</h2>
             <p className="text-[#ff1493] font-medium mb-6 md:mb-8 text-sm md:text-base">Stream directly to your software without opening a browser window.</p>
-
             <div className="space-y-4 md:space-y-6 text-gray-300 text-sm md:text-base">
-              <section>
-                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 1: Pick your Code</h3>
-                <p>Decide on a permanent 5-digit number you will always use for OBS (e.g., <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b]">77777</code>).</p>
-              </section>
-
-              <section>
-                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 2: Add Browser Source</h3>
-                <p>Open OBS and select your streaming scene. Go to the <strong>Sources</strong> dock, click the <strong>+</strong> button, and select <strong>Browser</strong>. Name it "Zetcam".</p>
-              </section>
-
-              <section>
-                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 3: Configure the Link</h3>
-                <p className="mb-2">In the properties window, set the following:</p>
-                <ul className="list-disc pl-5 space-y-2">
-                  <li><strong>URL:</strong> Copy your personalized link and paste it into OBS: <br/> <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b] break-all block mt-1 select-all">https://sund864.github.io/Zetcam/?room=77777</code></li>
-                  <li><strong>Width:</strong> <code className="text-white">1920</code> | <strong>Height:</strong> <code className="text-white">1080</code></li>
-                  <li><strong>Custom CSS:</strong> Delete all text in this box.</li>
-                  <li>Check the box for <strong>Control audio via OBS</strong> to route your phone microphone directly into your audio mixer.</li>
-                </ul>
-              </section>
-
-              <section>
-                <h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 4: Go Live</h3>
-                <p>Open this app on your phone, tap <strong>I am the Camera</strong>, type in your code (e.g., 77777), and hit <strong>Go Live</strong>. Your video will instantly appear in OBS!</p>
-              </section>
+              <section><h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 1: Pick your Code</h3><p>Decide on a permanent 5-digit number you will always use for OBS (e.g., <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b]">77777</code>).</p></section>
+              <section><h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 2: Add Browser Source</h3><p>Open OBS and select your streaming scene. Go to the <strong>Sources</strong> dock, click the <strong>+</strong> button, and select <strong>Browser</strong>. Name it "Zetcam".</p></section>
+              <section><h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 3: Configure the Link</h3><p className="mb-2">In the properties window, set the following:</p><ul className="list-disc pl-5 space-y-2"><li><strong>URL:</strong> Copy your personalized link and paste it into OBS: <br/> <code className="bg-black border border-[#333] px-2 py-0.5 rounded text-[#ff3b3b] break-all block mt-1 select-all">https://sund864.github.io/Zetcam/?room=77777</code></li><li><strong>Width:</strong> <code className="text-white">1920</code> | <strong>Height:</strong> <code className="text-white">1080</code></li><li><strong>Custom CSS:</strong> Delete all text in this box.</li><li>Check the box for <strong>Control audio via OBS</strong>.</li></ul></section>
+              <section><h3 className="text-[#9933ff] font-bold text-base md:text-lg mb-1 md:mb-2">Step 4: Go Live</h3><p>Open this app on your phone, tap <strong>I am the Camera</strong>, type in your code (e.g., 77777), and hit <strong>Go Live</strong>. Your video will instantly appear in OBS!</p></section>
             </div>
-            
-            <button 
-              onClick={() => setShowGuide(false)} 
-              className="mt-6 md:mt-8 w-full py-3 md:py-4 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold text-white transition-all uppercase tracking-widest text-xs md:text-sm"
-            >
-              Got it, let's stream!
-            </button>
+            <button onClick={() => setShowGuide(false)} className="mt-6 md:mt-8 w-full py-3 md:py-4 bg-[#222] hover:bg-[#333] border border-[#444] rounded-xl font-bold text-white transition-all uppercase tracking-widest text-xs md:text-sm">Got it, let's stream!</button>
           </div>
         </div>
       )}
@@ -201,9 +136,7 @@ function Receiver({ roomId, goBack }) {
   useEffect(() => {
     const peer = new Peer(`webcam-app-${roomId}`);
     peerRef.current = peer;
-
     peer.on('open', () => setStatus('Waiting for camera to connect...'));
-
     peer.on('call', (call) => {
       setStatus('Connecting to camera...');
       activeCallRef.current = call;
@@ -218,7 +151,6 @@ function Receiver({ roomId, goBack }) {
         setRemoteStream(null);
       });
     });
-
     peer.on('connection', (conn) => {
       activeDataConnRef.current = conn;
       conn.on('data', (data) => {
@@ -226,7 +158,6 @@ function Receiver({ roomId, goBack }) {
         if (data.type === 'STATE_SYNC') setPhoneState(data.state);
       });
     });
-
     return () => { if (peerRef.current) peerRef.current.destroy(); };
   }, [roomId]);
 
@@ -263,19 +194,13 @@ function Receiver({ roomId, goBack }) {
             {isPhoneSwitching ? (
               <>
                 <RefreshCw className="w-16 h-16 mb-6 opacity-80 animate-spin text-[#ff1493]" />
-                <p className="text-2xl font-medium tracking-wide text-gray-400">
-                  Cycling Phone Hardware...
-                </p>
+                <p className="text-2xl font-medium tracking-wide text-gray-400">Cycling Phone Hardware...</p>
               </>
             ) : (
               <div className="bg-[#111]/90 backdrop-blur-xl p-10 md:p-16 rounded-[3rem] border border-[#333] shadow-[0_0_50px_rgba(255,20,147,0.15)] text-center animate-in zoom-in-95 duration-500">
-                <div className="flex justify-center mb-6">
-                  <Monitor className="w-12 h-12 text-[#ff3b3b] opacity-80 animate-pulse" />
-                </div>
+                <div className="flex justify-center mb-6"><Monitor className="w-12 h-12 text-[#ff3b3b] opacity-80 animate-pulse" /></div>
                 <p className="text-[#ff1493] font-bold mb-3 text-sm uppercase tracking-[0.3em]">Waiting for Camera</p>
-                <div className="text-7xl md:text-9xl font-mono font-black tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                  {roomId}
-                </div>
+                <div className="text-7xl md:text-9xl font-mono font-black tracking-widest text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">{roomId}</div>
                 <p className="text-gray-400 mt-6 max-w-sm mx-auto text-base font-medium">Enter this code on your phone to connect.</p>
               </div>
             )}
@@ -289,41 +214,24 @@ function Receiver({ roomId, goBack }) {
 
       {remoteStream && !isPhoneSwitching && (
         <div className="absolute top-6 right-6 flex flex-col items-end gap-3 z-50 pointer-events-auto">
-          <button onClick={() => setShowSettings(!showSettings)} className="p-4 bg-[#111]/90 hover:bg-[#ff1493] hover:text-white backdrop-blur-xl rounded-full text-white border border-[#333] transition-all shadow-[0_0_20px_rgba(255,20,147,0.2)]">
-            <Settings className="w-7 h-7" />
-          </button>
-
+          <button onClick={() => setShowSettings(!showSettings)} className="p-4 bg-[#111]/90 hover:bg-[#ff1493] hover:text-white backdrop-blur-xl rounded-full text-white border border-[#333] transition-all shadow-[0_0_20px_rgba(255,20,147,0.2)]"><Settings className="w-7 h-7" /></button>
           {showSettings && (
             <div className="bg-[#111]/95 backdrop-blur-xl border border-[#333] p-5 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.8)] w-80 animate-in fade-in slide-in-from-top-4 flex flex-col gap-3">
               <h3 className="text-gray-400 text-xs font-bold uppercase tracking-wider px-2 border-b border-[#333] pb-2">Remote Hardware</h3>
+              
+              {/* Removed Switch Lens from PC side as requested */}
               <div className="grid grid-cols-2 gap-2">
-                <button onClick={() => sendCommandToPhone('CMD_TOGGLE_LENS')} className="flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]">
-                  <SwitchCamera className="w-5 h-5 text-[#9933ff]" /> Switch Lens
-                </button>
-                <button onClick={() => sendCommandToPhone('CMD_TOGGLE_TORCH')} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${phoneState.torch ? 'bg-[#ff3b3b] text-white border-[#ff3b3b] shadow-[0_0_15px_rgba(255,59,59,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}>
-                  <Sun className="w-5 h-5" /> Flashlight
-                </button>
-                <button onClick={() => sendCommandToPhone('CMD_TOGGLE_MIC')} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${phoneState.mic ? 'bg-[#ff1493] text-white border-[#ff1493] shadow-[0_0_15px_rgba(255,20,147,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}>
-                  {phoneState.mic ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />} Audio
-                </button>
-                <button onClick={() => sendCommandToPhone('CMD_SET_QUALITY', { mode: phoneState.quality === 'high' ? 'performance' : 'high' })} className="flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]">
-                  <Monitor className="w-5 h-5 text-[#9933ff]" /> {phoneState.quality === 'high' ? '1080p Mode' : '720p 60fps'}
-                </button>
+                <button onClick={() => sendCommandToPhone('CMD_TOGGLE_TORCH')} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${phoneState.torch ? 'bg-[#ff3b3b] text-white border-[#ff3b3b] shadow-[0_0_15px_rgba(255,59,59,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}><Sun className="w-5 h-5" /> Flashlight</button>
+                <button onClick={() => sendCommandToPhone('CMD_TOGGLE_MIC')} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${phoneState.mic ? 'bg-[#ff1493] text-white border-[#ff1493] shadow-[0_0_15px_rgba(255,20,147,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}>{phoneState.mic ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />} Audio</button>
+                <button onClick={() => sendCommandToPhone('CMD_SET_QUALITY', { mode: phoneState.quality === 'high' ? 'performance' : 'high' })} className="col-span-2 flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]"><Monitor className="w-5 h-5 text-[#9933ff]" /> {phoneState.quality === 'high' ? '1080p Mode' : '720p 60fps'}</button>
               </div>
 
               <h3 className="text-gray-400 text-xs font-bold uppercase tracking-wider px-2 border-b border-[#333] pb-2 mt-2">PC Visual Adjustments</h3>
               <div className="grid grid-cols-2 gap-2">
-                <button onClick={() => setLowLightMode(!lowLightMode)} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${lowLightMode ? 'bg-[#9933ff] text-white border-[#9933ff] shadow-[0_0_15px_rgba(153,51,255,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}>
-                  <SunMoon className="w-5 h-5" /> Color Correct
-                </button>
-                <button onClick={() => setRotation(prev => prev === 0 ? 90 : prev === 90 ? 180 : prev === 180 ? 270 : 0)} className="flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]">
-                  <RotateCw className="w-5 h-5 text-[#ff3b3b]" /> Rotate Feed
-                </button>
+                <button onClick={() => setLowLightMode(!lowLightMode)} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${lowLightMode ? 'bg-[#9933ff] text-white border-[#9933ff] shadow-[0_0_15px_rgba(153,51,255,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}><SunMoon className="w-5 h-5" /> Color Correct</button>
+                <button onClick={() => setRotation(prev => prev === 0 ? 90 : prev === 90 ? 180 : prev === 180 ? 270 : 0)} className="flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]"><RotateCw className="w-5 h-5 text-[#ff3b3b]" /> Rotate Feed</button>
               </div>
-              
-              <button onClick={handlePcDisconnect} className="mt-2 flex justify-center items-center gap-3 px-4 py-3 bg-[#ff3b3b]/10 hover:bg-[#ff3b3b] hover:text-white rounded-2xl font-bold text-sm transition-all text-[#ff3b3b] border border-[#ff3b3b]/30">
-                <LogOut className="w-5 h-5" /> Disconnect Camera
-              </button>
+              <button onClick={handlePcDisconnect} className="mt-2 flex justify-center items-center gap-3 px-4 py-3 bg-[#ff3b3b]/10 hover:bg-[#ff3b3b] hover:text-white rounded-2xl font-bold text-sm transition-all text-[#ff3b3b] border border-[#ff3b3b]/30"><LogOut className="w-5 h-5" /> Disconnect Camera</button>
             </div>
           )}
         </div>
@@ -331,9 +239,7 @@ function Receiver({ roomId, goBack }) {
 
       {remoteStream && (
         <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-40 pointer-events-auto">
-          <button onClick={toggleFullScreen} className="bg-black/60 hover:bg-[#ff1493] hover:text-white backdrop-blur-md p-4 rounded-full text-white transition-all shadow-[0_0_15px_rgba(255,20,147,0.3)] border border-white/10" title="Toggle Fullscreen">
-            <Maximize2 className="w-8 h-8" />
-          </button>
+          <button onClick={toggleFullScreen} className="bg-black/60 hover:bg-[#ff1493] hover:text-white backdrop-blur-md p-4 rounded-full text-white transition-all shadow-[0_0_15px_rgba(255,20,147,0.3)] border border-white/10" title="Toggle Fullscreen"><Maximize2 className="w-8 h-8" /></button>
         </div>
       )}
     </div>
@@ -345,6 +251,7 @@ function Sender({ roomId, goBack }) {
   const [inputCode, setInputCode] = useState('');
   const [isConnecting, setIsConnecting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showSettings, setShowSettings] = useState(false); // New state for mobile settings
   
   const [localStream, setLocalStream] = useState(null);
   const [connected, setConnected] = useState(false);
@@ -359,6 +266,14 @@ function Sender({ roomId, goBack }) {
   const callRef = useRef(null);
   const dataConnRef = useRef(null); 
   const targetRoomIdRef = useRef(roomId);
+
+  const isFrontCameraRef = useRef(isFrontCamera);
+  const qualityModeRef = useRef(qualityMode);
+  const micEnabledRef = useRef(micEnabled);
+  
+  useEffect(() => { isFrontCameraRef.current = isFrontCamera; }, [isFrontCamera]);
+  useEffect(() => { qualityModeRef.current = qualityMode; }, [qualityMode]);
+  useEffect(() => { micEnabledRef.current = micEnabled; }, [micEnabled]);
 
   useEffect(() => {
     if (dataConnRef.current && dataConnRef.current.open) {
@@ -383,13 +298,26 @@ function Sender({ roomId, goBack }) {
   useEffect(() => { return () => stopStream(); }, []);
 
   const requestOptimizedStream = async (facing, mode) => {
-    const facingMode = facing ? 'user' : 'environment';
+    const exactFacing = facing ? { exact: 'user' } : { exact: 'environment' };
+    const fallbackFacing = facing ? 'user' : 'environment';
     const baseConstraints = { audio: true }; 
+    
     try {
-      if (mode === 'high') return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } } });
-      else return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 60 } } });
+      if (mode === 'high') {
+         return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode: exactFacing, width: { ideal: 1920 }, height: { ideal: 1080 } } });
+      } else {
+         return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode: exactFacing, width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 60 } } });
+      }
     } catch (e1) {
-      return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode } });
+      try {
+         return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode: exactFacing } });
+      } catch (e2) {
+         try {
+             return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: { facingMode: fallbackFacing } });
+         } catch (e3) {
+             return await navigator.mediaDevices.getUserMedia({ ...baseConstraints, video: true });
+         }
+      }
     }
   };
 
@@ -398,12 +326,12 @@ function Sender({ roomId, goBack }) {
     setIsConnecting(true);
     targetRoomIdRef.current = roomIdToConnect;
     
-    const currentFacing = overrideFacing !== null ? overrideFacing : isFrontCamera;
-    const currentQuality = overrideQuality !== null ? overrideQuality : qualityMode;
+    const currentFacing = overrideFacing !== null ? overrideFacing : isFrontCameraRef.current;
+    const currentQuality = overrideQuality !== null ? overrideQuality : qualityModeRef.current;
 
     try {
       const stream = await requestOptimizedStream(currentFacing, currentQuality);
-      stream.getAudioTracks().forEach(track => track.enabled = micEnabled);
+      stream.getAudioTracks().forEach(track => track.enabled = micEnabledRef.current);
       setLocalStream(stream);
 
       const peer = new Peer();
@@ -417,7 +345,7 @@ function Sender({ roomId, goBack }) {
         conn.on('open', () => {
           setConnected(true);
           setIsConnecting(false);
-          conn.send({ type: 'STATE_SYNC', state: { mic: micEnabled, torch: torchEnabled, quality: currentQuality } });
+          conn.send({ type: 'STATE_SYNC', state: { mic: micEnabledRef.current, torch: torchEnabled, quality: currentQuality } });
         });
 
         conn.on('data', (data) => {
@@ -434,7 +362,6 @@ function Sender({ roomId, goBack }) {
         });
 
         const call = peer.call(targetId, stream);
-        callRef.current = call;
         call.on('close', () => {
           setConnected(false);
           setErrorMsg("Webcam stream stopped by PC.");
@@ -461,32 +388,34 @@ function Sender({ roomId, goBack }) {
   };
 
   const executeCameraSwitch = () => {
-    setIsFrontCamera(prev => {
-      const nextMode = !prev;
-      setTorchEnabled(false);
-      if (dataConnRef.current && dataConnRef.current.open) dataConnRef.current.send({ type: 'PHONE_SWITCHING_START' });
-      setIsConnecting(true);
-      stopStream(); 
-      setTimeout(() => startCameraAndConnect(targetRoomIdRef.current, nextMode, qualityMode), 300);
-      return nextMode;
-    });
+    const nextMode = !isFrontCameraRef.current;
+    setIsFrontCamera(nextMode);
+    setTorchEnabled(false);
+    
+    if (dataConnRef.current && dataConnRef.current.open) {
+        dataConnRef.current.send({ type: 'PHONE_SWITCHING_START' });
+    }
+    setIsConnecting(true);
+    stopStream(); 
+    
+    setTimeout(() => startCameraAndConnect(targetRoomIdRef.current, nextMode, qualityModeRef.current), 600);
   };
 
   const executeQualityChange = (newMode) => {
     setQualityMode(newMode);
     setTorchEnabled(false);
-    if (dataConnRef.current && dataConnRef.current.open) dataConnRef.current.send({ type: 'PHONE_SWITCHING_START' });
+    if (dataConnRef.current && dataConnRef.current.open) {
+        dataConnRef.current.send({ type: 'PHONE_SWITCHING_START' });
+    }
     setIsConnecting(true);
     stopStream();
-    setTimeout(() => startCameraAndConnect(targetRoomIdRef.current, isFrontCamera, newMode), 300);
+    setTimeout(() => startCameraAndConnect(targetRoomIdRef.current, isFrontCameraRef.current, newMode), 600);
   };
 
   const toggleMic = (activeStream) => {
-    setMicEnabled(prev => {
-      const newState = !prev;
-      if (activeStream) activeStream.getAudioTracks().forEach(track => track.enabled = newState);
-      return newState;
-    });
+    const newState = !micEnabledRef.current;
+    setMicEnabled(newState);
+    if (activeStream) activeStream.getAudioTracks().forEach(track => track.enabled = newState);
   };
 
   const toggleTorch = async (activeStream) => {
@@ -517,6 +446,33 @@ function Sender({ roomId, goBack }) {
           <div className="absolute top-8 left-8 flex items-center gap-3 bg-black/80 backdrop-blur-md px-5 py-3 rounded-full border border-white/10 text-sm font-bold shadow-[0_0_20px_rgba(255,59,59,0.3)]">
              <div className={`w-3 h-3 rounded-full ${connected ? 'bg-[#ff3b3b] animate-pulse shadow-[0_0_10px_rgba(255,59,59,0.8)]' : 'bg-[#9933ff]'}`}></div>
              <span className="tracking-widest uppercase text-white">{connected ? 'LIVE TO PC' : 'CONNECTING...'}</span>
+          </div>
+
+          {/* NEW: Mobile Settings Menu exactly like the PC view */}
+          <div className="absolute top-6 right-6 flex flex-col items-end gap-3 z-50">
+            <button onClick={() => setShowSettings(!showSettings)} className="p-4 bg-black/80 hover:bg-[#ff1493] hover:text-white backdrop-blur-md rounded-full text-white border border-white/10 transition-all shadow-[0_0_20px_rgba(255,20,147,0.3)]">
+              <Settings className="w-6 h-6" />
+            </button>
+
+            {showSettings && (
+              <div className="bg-[#111]/95 backdrop-blur-xl border border-[#333] p-5 rounded-3xl shadow-[0_0_30px_rgba(0,0,0,0.8)] w-[260px] animate-in fade-in slide-in-from-top-4 flex flex-col gap-3">
+                <h3 className="text-gray-400 text-xs font-bold uppercase tracking-wider px-2 border-b border-[#333] pb-2">Camera Options</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <button onClick={executeCameraSwitch} className="flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]">
+                    <SwitchCamera className="w-5 h-5 text-[#9933ff]" /> Switch Lens
+                  </button>
+                  <button onClick={() => toggleTorch(localStream)} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${torchEnabled ? 'bg-[#ff3b3b] text-white border-[#ff3b3b] shadow-[0_0_15px_rgba(255,59,59,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}>
+                    <Sun className="w-5 h-5" /> Flashlight
+                  </button>
+                  <button onClick={() => toggleMic(localStream)} className={`flex flex-col items-center gap-2 p-3 rounded-2xl font-bold text-xs transition-all border ${micEnabled ? 'bg-[#ff1493] text-white border-[#ff1493] shadow-[0_0_15px_rgba(255,20,147,0.4)]' : 'bg-[#222] hover:bg-[#333] text-white border-[#333]'}`}>
+                    {micEnabled ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />} Audio
+                  </button>
+                  <button onClick={() => executeQualityChange(qualityMode === 'high' ? 'performance' : 'high')} className="flex flex-col items-center gap-2 p-3 bg-[#222] hover:bg-[#333] rounded-2xl font-bold text-xs transition-all text-white border border-[#333]">
+                    <Monitor className="w-5 h-5 text-[#9933ff]" /> {qualityMode === 'high' ? '1080p' : '720p'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
