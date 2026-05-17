@@ -6,13 +6,13 @@
     
     <title>Zetcam Pro</title>
 
-    <link rel="manifest" href="./manifest.json" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#160a1a" />
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Zetcam">
-    <link rel="apple-touch-icon" href="./pwa-icon.png">
+    <link rel="apple-touch-icon" href="logo.jpg">
   </head>
   <body>
     <div id="root"></div>
@@ -21,7 +21,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
+          navigator.serviceWorker.register('sw.js')
             .then(() => console.log('SW Registered'))
             .catch(() => console.log('SW Failed'));
         });
