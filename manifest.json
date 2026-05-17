@@ -3,14 +3,14 @@
   "name": "Zetcam Pro",
   "icons": [
     {
-      "src": "./logo.jpg",
+      "src": "./pwa-icon.png",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/png"
     },
     {
-      "src": "./logo.jpg",
+      "src": "./pwa-icon.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png"
     }
   ],
   "start_url": "./",
