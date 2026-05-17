@@ -1,24 +1,31 @@
 <!doctype html>
 <html lang="en">
   <head>
-  <meta charset="UTF-8" />
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  
-  <title>Zetcam - Wireless Webcam</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    
+    <title>Zetcam Pro</title>
 
-  <link rel="manifest" href="./manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="theme-color" content="#160a1a" />
 
-  <meta name="theme-color" content="#160a1a" />
-
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Zetcam">
-  
-  <link rel="apple-touch-icon" href="./pwa-icon.png">
-</head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Zetcam">
+    <link rel="apple-touch-icon" href="./pwa-icon.png">
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-  <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js')})}</script></body>
+    
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log('SW Registered'))
+            .catch(() => console.log('SW Failed'));
+        });
+      }
+    </script>
+  </body>
 </html>
